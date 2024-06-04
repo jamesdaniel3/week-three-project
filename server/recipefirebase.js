@@ -60,8 +60,8 @@ router.delete("/delete-recipe", async (req, res) => {
 router.get("/user-favorites", async (req, res) => {
     const { id } = req.query;
     try {
-        const docSnap = await db.collection("favorites").doc(id).get();
-        if (docSnap.exists()) {
+        const docSnap = await db.collection("users").doc(id).get();
+        if (docSnap.exists) {
             res.status(200).json(docSnap.data());
         } else {
             console.log(`Document with id '${id}' does not exist`);
@@ -79,10 +79,9 @@ router.get("/user-favorites", async (req, res) => {
  */
 router.get("/recipe", async (req, res) => {
     const { id } = req.query;
-    console.log(id)
     try {
         const docSnap = await db.collection("recipes").doc(id).get();
-        if (docSnap) {
+        if (docSnap.exists) {
             res.status(200).json(docSnap.data());
         } else {
             console.log(`Document with id '${id}' does not exist`);
@@ -91,6 +90,28 @@ router.get("/recipe", async (req, res) => {
     } catch (err) {
         console.error('Error fetching recipe:', err);
         res.status(500).json({ error: 'An error occurred while fetching data' });
+    }
+});
+
+router.put("/add-favorite", async (req, res) => {
+    const { userid, recipeid } = req.query;
+    console.log(userid, recipeid);
+    try {
+        const docSnap = await db.collection("users").doc(userid).get();
+        if (docSnap.exists) {
+            await db.collection("users").doc(userid).update({
+                favoriteRecipes: [...docSnap.data().favoriteRecipes, recipeid],
+            });
+            res.status(200).json({ message: `Successfully added recipe with id ${recipeid} to favorites` });
+        } else {
+            await db.collection("users").doc(userid).set({
+                favoriteRecipes: [recipeid],
+            });
+            res.status(200).json({ message: `Successfully added recipe with id ${recipeid} to favorites` });
+        }
+    } catch (err) {
+        console.error('Error adding recipe to favorites:', err);
+        res.status(400).json({ error: err.message });
     }
 });
 
