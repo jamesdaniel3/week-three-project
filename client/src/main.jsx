@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "./styles/Index.css"
 
 import Admin from "./routes/Admin.jsx";
 import Login from "./routes/Login.jsx";
