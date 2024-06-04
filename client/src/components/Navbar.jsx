@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import { signOut } from "firebase/auth";
 import '../styles/Navbar.css';
 import { auth } from "../firebase.js";
+import chefHatLogo from '../assets/chefs-hat.png'; 
 
 export default function NavBar() {
     const [hidden, setHidden] = useState('');
     const navigate = useNavigate();
-
 
     const logout = () => {
         signOut(auth)
@@ -38,29 +38,20 @@ export default function NavBar() {
             </button>
             <div className={"main " + hidden}>
                 <div className="navbar-header">
-                    <span className="title">
-                        Cheffed
-                    </span>
+                    <img src={chefHatLogo} alt="Chef Hat Logo" className="logo" /> {/* Add the logo */}
+                    <span className="title">Cheffed</span>
                 </div>
                 <Link className="navbar-link" to={"/home"}>
-                    <span>
-                        Home
-                    </span>
+                    <span>Home</span>
                 </Link>
                 <Link className="navbar-link" to={"/find-recipes"}>
-                    <span>
-                        Find Recipes
-                    </span>
+                    <span>Find Recipes</span>
                 </Link>
                 <Link className="navbar-link" to={"/my-recipes"}>
-                    <span>
-                        My Recipes
-                    </span>
+                    <span>My Recipes</span>
                 </Link>
                 <div className="navbar-link logout" onClick={logout}>
-                    <span>
-                        Logout
-                    </span>
+                    <span>Logout</span>
                 </div>
             </div>
         </>
