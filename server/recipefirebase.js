@@ -118,4 +118,28 @@ router.put("/add-favorite", async (req, res) => {
     }
 });
 
+/** 
+ * @Query : give ?userid=""&recipeid="" in parameters
+ */
+router.put("/add-created", async (req, res) => {
+    const { userid, recipeid } = req.query;
+    console.log(userid, recipeid);
+    try {
+        const docSnap = await db.collection("users").doc(userid).get();
+        if (docSnap.exists) {
+            await db.collection("users").doc(userid).update({
+                createdRecipes: [...docSnap.data().createdRecipes, recipeid],
+            });
+            res.status(200).json({ message: `Successfully added recipe with id ${recipeid} to created` });
+        } else {
+            await db.collection("users").doc(userid).set({
+                createdRecipes: [recipeid],
+            });
+            res.status(200).json({ message: `Successfully added recipe with id ${recipeid} to created` });
+        }
+    } catch (err) {
+        console.error('Error adding recipe to favorites:', err);
+        res.status(400).json({ error: err.message });
+    }
+});
 export default router;
