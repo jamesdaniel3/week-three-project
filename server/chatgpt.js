@@ -23,5 +23,5 @@ router.post("/completion", async (req, res) => {
       res.status(500).send("An error occurred while processing your request.");
     }
 });
-  
+
 export default router;
