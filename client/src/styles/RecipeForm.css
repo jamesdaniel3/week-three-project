@@ -114,7 +114,7 @@
     width: 75%;
 }
 
-.ingredient-row, .instruction-row {
+.instruction-row {
     display: flex;
     align-items: flex-start;
     margin-bottom: 0.5rem;
