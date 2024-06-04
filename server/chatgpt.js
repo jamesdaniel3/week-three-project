@@ -9,6 +9,10 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+/**
+ * @Body : array of objects [{role: "", content: ""}, ...]
+ * @Return @string : response
+ */
 router.post("/completion", async (req, res) => {
     const messages = req.body.messages;
     try {

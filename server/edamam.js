@@ -9,6 +9,9 @@ const appid = process.env.EDAMAM_APP_ID;
 const appkey = process.env.EDAMAM_APP_KEY;
 const router = express.Router();
 
+/**
+ * @body : example { diet: "balanced", health: "dairy-free", cuisineType: "american" }
+ */
 router.get('/recipiesearch', async (req, res) => {
     try {
         const filterParams = req.query.filterParams || { diet: "balanced" };
