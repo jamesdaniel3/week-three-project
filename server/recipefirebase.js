@@ -4,7 +4,7 @@ import { db } from "./firebase.js";
 const router = express.Router();
 
 /**
- * Returns: list of all recipes
+ * @Return : list of all recipes
  */
 router.get('/recipes', async (req, res) => {
     try {
@@ -25,7 +25,7 @@ router.get('/recipes', async (req, res) => {
 });
 
 /** 
- * Body: Object of the recipe doc
+ * @Body : Object of the recipe doc
  */
 router.post("/create-recipe", async (req, res) => {
     try {
@@ -39,7 +39,7 @@ router.post("/create-recipe", async (req, res) => {
 });
 
 /** 
- * Body: id of the recipe doc
+ * @Body : id of the recipe doc
  */
 router.delete("/delete-recipe", async (req, res) => {
     const { id } = req.body;
@@ -54,8 +54,8 @@ router.delete("/delete-recipe", async (req, res) => {
 });
 
 /** 
- * Query: give the id for a user
- * Returns: list of IDs of recipes
+ * @Query : give the id for a user
+ * @Return : list of IDs of recipes
  */
 router.get("/user-favorites", async (req, res) => {
     const { id } = req.query;
@@ -74,8 +74,8 @@ router.get("/user-favorites", async (req, res) => {
 });
 
 /** 
- * Query: give ID of recipe
- * Returns: JSON object of recipe
+ * @Query : give ID of recipe
+ * @Return : JSON object of recipe
  */
 router.get("/recipe", async (req, res) => {
     const { id } = req.query;
