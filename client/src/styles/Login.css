@@ -1,0 +1,100 @@
+@import url(ColorPalette.css);
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--white1);
+}
+
+.login-main {
+    height: 450px;
+    width: 480px;
+    background-color: var(--white2);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.login-main-header {
+    width: 100%;
+    height: 130px;
+    background-color: var(--white3);
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--white5);
+}
+
+.login-main-header h1 {
+    margin-top: 18px;
+    margin-left: 38px;
+    font-size: 38px;
+    font-family: "Lora";
+}
+
+.login-main .banner-image {
+    height: 220px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.banner-image img {
+    width: 100%;
+    object-fit: cover;
+    filter: blur(1px);
+}
+
+.login-boxes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 38px;
+    gap: 16px;
+}
+.login-boxes input {
+    width: 320px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: var(--white1);
+    border: 2px solid var(--white5);
+    font-family: 'Radio Canada Big';
+    padding: 8px;
+}
+
+.login-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 18px;
+    width: 100%;
+}
+
+.login-button {
+    margin-top: 38px;
+    width: 110px;
+    height: 40px;
+    border-radius: 50px;
+    border: 3px solid var(--dgreen1);
+    color: var(--white1);
+    background-color: var(--dgreen1);
+    visibility: visible;
+    position: relative;
+    font-size: 15px;
+    transition: 0.3s;
+    font-family: "Radio Canada Big";
+}
+
+.login-button:hover {
+    background-color: var(--lgreen4);
+}
+
+.error-message {
+    margin-top: 28px;
+    font-weight: 800;
+    color: #a22725;
+    width: 100%;
+    font-family: "Lora";
+    text-align: center
+}
