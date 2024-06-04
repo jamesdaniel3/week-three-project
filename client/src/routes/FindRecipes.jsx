@@ -1,8 +1,12 @@
+import NavBar from "../components/Navbar.jsx";
+
 function FindRecipes() {
 
     return (
         <>
-            <p>This is the find recipes page</p>
+            <NavBar/>
+            <div className={"content"}>
+            </div>
         </>
     )
 }

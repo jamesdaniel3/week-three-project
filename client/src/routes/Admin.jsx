@@ -1,8 +1,12 @@
+import NavBar from "../components/Navbar.jsx";
+
 function Admin() {
 
     return (
         <>
-            <p>This is the admin page</p>
+            <NavBar/>
+            <div className={"content"}>
+            </div>
         </>
     )
 }

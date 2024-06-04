@@ -1,8 +1,11 @@
+import NavBar from "../components/Navbar.jsx";
 function Home() {
 
     return (
         <>
-            <p>This is the home page</p>
+            <NavBar/>
+            <div className={"content"}>
+            </div>
         </>
     )
 }
