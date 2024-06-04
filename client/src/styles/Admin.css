@@ -1,0 +1,106 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease, width 0.3s ease; 
+    margin-left: 70px; 
+}
+
+.main:hover ~ .content {
+    margin-left: 200px; 
+    width: calc(100% - 200px); 
+}
+
+.admin-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left; 
+}
+
+.admin-subtitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: left; 
+}
+
+.add-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--dbrown1);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.user-profiles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+
+}
+.user-profile {
+    display: flex;
+    align-items: center;
+    background-color: var(--lbrown2);
+    padding: 10px;
+    border-radius: 8px;
+    margin-left: 0; 
+}
+
+.user-icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--lbrown1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-right: 10px;
+}
+
+.recipe-details {
+    flex-grow: 1;
+    text-align: left; 
+}
+
+.recipe-details p {
+    margin: 0;
+    color: var(--dbrown1);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.approve, .reject {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.approve {
+    background-color: green;
+}
+
+.reject {
+    background-color: red;
+}
