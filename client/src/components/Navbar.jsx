@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { signOut } from "firebase/auth";
 import '../styles/Navbar.css';
+import '../styles/Index.css'
 import { auth } from "../firebase.js";
 
 export default function NavBar() {
@@ -55,6 +56,11 @@ export default function NavBar() {
                 <Link className="navbar-link" to={"/my-recipes"}>
                     <span>
                         My Recipes
+                    </span>
+                </Link>
+                <Link className="navbar-link" to={"/create-recipe"}>
+                    <span>
+                        Create a Recipe
                     </span>
                 </Link>
                 <div className="navbar-link logout" onClick={logout}>
