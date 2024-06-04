@@ -5,8 +5,11 @@ function Recipe() {
 
     return (
         <>
-            <NavBar/>
-            <div className={"content"}>
+            <div className={"container"}>
+                <NavBar />
+                <div className="content">
+                    <p>This is the recipe page</p>
+                </div>
             </div>
         </>
     )

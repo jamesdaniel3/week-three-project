@@ -5,8 +5,11 @@ function Admin() {
 
     return (
         <>
-            <NavBar/>
-            <div className={"content"}>
+            <div className={"container"}>
+                <NavBar />
+                <div className="content">
+                    <p>This is the admin page</p>
+                </div>
             </div>
         </>
     )
