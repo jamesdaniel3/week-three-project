@@ -9,6 +9,8 @@ export default function RecipeForm() {
         instructions: [""],
         glutenFree: false,
         vegetarian: false,
+        instructionsType: "write", // New state to track the selected instructions type
+        instructionsLink: "", // New state to store the website link
     });
 
     const handleChange = (e) => {
@@ -115,9 +117,15 @@ export default function RecipeForm() {
                                 className="input-field"
                             >
                                 <option value="">Select Unit</option>
-                                <option value="ounces">Ounces</option>
+                                <option value="cups">Cups</option>
+                                <option value="gallons">Gallons</option>
                                 <option value="grams">Grams</option>
+                                <option value="liters">Liters</option>
+                                <option value="ounces">Ounces</option>
+                                <option value="pinches">Pinches</option>
                                 <option value="pints">Pints</option>
+                                <option value="pounds">Pounds</option>
+                                <option value="quarts">Quarts</option>
                             </select>
                             <button
                                 type="button"
@@ -132,28 +140,65 @@ export default function RecipeForm() {
                         +
                     </button>
                     <div className="section-header">Instructions</div>
-                    {formData.instructions.map((instruction, index) => (
-                        <div key={index} className="instruction-row">
-                            <span className="instruction-number">{index + 1}</span>
-                            <textarea
-                                name="instruction"
-                                placeholder="Instruction"
-                                value={instruction}
-                                onChange={(e) => handleInstructionChange(index, e)}
-                                className="instruction-field"
+                    <div className="radio-group">
+                        <input
+                            type="radio"
+                            id="write"
+                            name="instructionsType"
+                            value="write"
+                            checked={formData.instructionsType === "write"}
+                            onChange={handleChange}
+                            className="radio-input"
+                        />
+                        <label htmlFor="write" className="radio-label">Write your Own</label>
+                        <input
+                            type="radio"
+                            id="link"
+                            name="instructionsType"
+                            value="link"
+                            checked={formData.instructionsType === "link"}
+                            onChange={handleChange}
+                            className="radio-input"
+                        />
+                        <label htmlFor="link" className="radio-label">Link a Website</label>
+                    </div>
+                    {formData.instructionsType === "write" ? (
+                        formData.instructions.map((instruction, index) => (
+                            <div key={index} className="instruction-row">
+                                <span className="instruction-number">{index + 1}</span>
+                                <textarea
+                                    name="instruction"
+                                    placeholder="Instruction"
+                                    value={instruction}
+                                    onChange={(e) => handleInstructionChange(index, e)}
+                                    className="instruction-field"
+                                />
+                                <button
+                                    type="button"
+                                    className="remove-button"
+                                    onClick={() => removeInstruction(index)}
+                                >
+                                    X
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="instruction-row">
+                            <input
+                                type="text"
+                                name="instructionsLink"
+                                placeholder="Website Link"
+                                value={formData.instructionsLink}
+                                onChange={handleChange}
+                                className="input-field"
                             />
-                            <button
-                                type="button"
-                                className="remove-button"
-                                onClick={() => removeInstruction(index)}
-                            >
-                                X
-                            </button>
                         </div>
-                    ))}
-                    <button type="button" onClick={addInstruction} className="add-button">
-                        +
-                    </button>
+                    )}
+                    {formData.instructionsType === "write" && (
+                        <button type="button" onClick={addInstruction} className="add-button">
+                            +
+                        </button>
+                    )}
                     <div className="section-header">Dietary Notes</div>
                     <div className="checkbox-container">
                         <label>
