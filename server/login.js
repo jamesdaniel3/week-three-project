@@ -1,8 +1,8 @@
-const db = require('./firebase');
-const express = require("express");
-const router = express.Router();
-const admin = require('firebase-admin');
+import { db } from "./firebase.js";
+import express from "express";
+import admin from "firebase-admin";
 
+const router = express.Router();
 // get all admin emails
 router.get("/", async (req, res) => {
     try {
@@ -18,4 +18,4 @@ router.get("/", async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
