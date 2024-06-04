@@ -1,4 +1,4 @@
-@import url(ColorPalette.css);
+/* @import url(ColorPalette.css);
 
 @media only screen and (max-width: 800px) {
     .main {
@@ -49,10 +49,11 @@ button.hide-button img.hidden {
     transition: max-width 0.3s ease; 
     max-height: 100vh;
     position: fixed;
+    z-index: 0; 
 }
 
 .main:hover {
-    max-width: 400px; 
+    max-width: 250px; 
 }
 
 .navbar-header {
@@ -67,7 +68,7 @@ button.hide-button img.hidden {
 
 .navbar-header .logo {
     width: 50px; 
-    height: 50px; 
+    height: 50px;
     margin-right: 10px; 
 }
 
@@ -103,6 +104,122 @@ button.hide-button img.hidden {
 
 .main:hover .navbar-link span {
     display: inline; 
+}
+
+.navbar-link:hover {
+    transform: translateX(2%);
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+} */
+
+@import url(ColorPalette.css);
+
+@media only screen and (max-width: 800px) {
+    .main {
+        min-width: 100vw !important;
+        max-width: 100vw !important;
+        position: fixed;
+        z-index: 5 !important;
+    }
+    .hide-button img {
+        visibility: visible !important;
+        position: fixed !important;
+    }
+
+    .hidden {
+        pointer-events: none;
+        transform: translateX(-100%);
+    }
+}
+
+button.hide-button {
+    position: fixed;
+    top: 50%;
+    z-index: 10;
+    visibility: hidden;
+    scale: 50%;
+}
+
+button.hide-button img {
+    margin-left: 18px;
+    transform: rotateZ(-45deg);
+    transition: 0.2s;
+}
+
+button.hide-button img.hidden {
+    transform: rotateZ(135deg);
+    pointer-events: all;
+}
+
+.main {
+    background-color: var(--lbrown1);
+    height: auto;
+    min-height: 100vh;
+    min-width: 70px; /* Adjusted for sliding effect */
+    max-width: 70px; /* Adjusted for sliding effect */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: max-width 0.3s ease; /* Added transition for sliding effect */
+    max-height: 100vh;
+    position: fixed;
+    z-index: 0; /* Ensure navbar is below the content */
+}
+
+.main:hover {
+    max-width: 200px; /* Adjusted for wider sliding effect */
+}
+
+.navbar-header {
+    width: 100%;
+    height: 100px;
+    background-color: var(--lbrown2);
+    display: flex;
+    align-items: center;
+    padding: 0 10px; /* Added padding for spacing */
+    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+}
+
+.navbar-header .logo {
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    margin-right: 10px; /* Add margin to the right of the logo */
+}
+
+.navbar-header .title {
+    color: var(--dbrown1);
+    font-family: "Lora", serif;
+    font-weight: 500;
+    font-size: 28px;
+    display: none; /* Hide title initially */
+}
+
+.main:hover .navbar-header .title {
+    display: inline; /* Show title on hover */
+}
+
+.navbar-link {
+    width: 100%;
+    height: 40px;
+    transition: 0.2s;
+    font-size: 21px;
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
+    color: var(--dbrown1);
+    padding: 0 10px; /* Added padding for spacing */
+    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+}
+
+.navbar-link span {
+    margin-left: 15px;
+    display: none; /* Hide link text initially */
+}
+
+.main:hover .navbar-link span {
+    display: inline; /* Show link text on hover */
 }
 
 .navbar-link:hover {
