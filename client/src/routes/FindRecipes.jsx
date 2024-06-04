@@ -1,4 +1,5 @@
 import NavBar from "../components/Navbar.jsx";
+import "../styles/index.css"
 
 function FindRecipes() {
 

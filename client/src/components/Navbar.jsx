@@ -1,14 +1,26 @@
 import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { signOut } from "firebase/auth";
 import '../styles/Navbar.css';
 import { auth } from "../firebase.js";
 
 export default function NavBar() {
+    const [hidden, setHidden] = useState('');
     const navigate = useNavigate();
+
 
     const logout = () => {
         signOut(auth)
             .then(() => { navigate('/') });
+    }
+
+    const hideNav = () => {
+        console.log("HIDING");
+        if (hidden === '') {
+            setHidden('hidden');
+        } else {
+            setHidden('');
+        }
     }
 
     if (auth) {
@@ -21,7 +33,10 @@ export default function NavBar() {
 
     return (
         <>
-            <div className={"main "}>
+            <button className="hide-button">
+                <img src="src/assets/edge.png" className={"hide-button " + hidden} onClick={hideNav} />
+            </button>
+            <div className={"main " + hidden}>
                 <div className="navbar-header">
                     <span className="title">
                         Cheffed
