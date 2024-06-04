@@ -1,89 +1,97 @@
-import { db } from "./firebase.js";
 import express from "express";
-import axios from "axios";
-import { collection, getDocs, updateDoc, doc, addDoc, deleteDoc } from "firebase/firestore";
+import { db } from "./firebase.js";
+
 const router = express.Router();
 
 /**
- * returns: list of all recipies
+ * Returns: list of all recipes
  */
 router.get('/recipes', async (req, res) => {
     try {
         let ret = [];
-        const querySnapshot = await getDocs(collection(db, "recipes"));
+        const querySnapshot = await db.collection('recipes').get();
         querySnapshot.forEach((doc) => {
             ret.push({
                 id: doc.id,
                 ...doc.data(),
             });
         });
+        console.log(ret);
         res.status(200).json(ret);
     } catch (err) {
+        console.error('Error fetching data:', err);
         res.status(500).json({ error: 'An error occurred while fetching data' });
     }
 });
 
 /** 
- * body: Give Object of the recipe doc
+ * Body: Object of the recipe doc
  */
 router.post("/create-recipe", async (req, res) => {
     try {
         const recipe = req.body.recipe; // Object of the doc
-        const docRef = await addDoc(collection(db, "recipe"), recipe);
-        res.status(200).json({ id: docRef.id, message: `Successfully created user with id ${docRef.id}` });
+        const response = await db.collection("recipes").add(recipe);
+        res.status(200).json({ id: docRef.id, message: `Successfully created recipe with id ${docRef.id}` });
     } catch (err) {
-        res.status(400).json({ error: err.message});
+        console.error('Error creating recipe:', err);
+        res.status(400).json({ error: err.message });
     }
 });
 
 /** 
- * body: id of the recipe doc
+ * Body: id of the recipe doc
  */
 router.delete("/delete-recipe", async (req, res) => {
-    const id = req.body.id;
+    const { id } = req.body;
     try {
-        await deleteDoc(doc(db, "recipes", id))
+        await deleteDoc(doc(db, "recipes", id));
+        await db.collection("recipes").delete(id);
         res.status(200).json({ message: `Successfully deleted recipe with id ${id}` });
     } catch (err) {
-        res.status(400).json({ error: err.message});
+        console.error('Error deleting recipe:', err);
+        res.status(400).json({ error: err.message });
     }
 });
 
 /** 
- * body: give the id for a user
- * returns: list of IDs of recipes
+ * Query: give the id for a user
+ * Returns: list of IDs of recipes
  */
 router.get("/user-favorites", async (req, res) => {
-    const id = req.body.id;
+    const { id } = req.query;
     try {
-        const docSnap = await getDoc(doc(db, "favorites", id));
+        const docSnap = await db.collection("favorites").doc(id).get();
         if (docSnap.exists()) {
-            res.status(200).json(docSnap);  
+            res.status(200).json(docSnap.data());
         } else {
-            console.log(`Document '${classID}' does not exist`);
-            res.status(500).json({ error: `Doc with id ${id} does not exist` });
+            console.log(`Document with id '${id}' does not exist`);
+            res.status(404).json({ error: `Document with id ${id} does not exist` });
         }
     } catch (err) {
+        console.error('Error fetching user favorites:', err);
         res.status(500).json({ error: 'An error occurred while fetching data' });
     }
 });
 
 /** 
- * body: give ID of recipe
- * returns: JSON object of recipe
+ * Query: give ID of recipe
+ * Returns: JSON object of recipe
  */
 router.get("/recipe", async (req, res) => {
-    const id = req.body.id;
+    const { id } = req.query;
+    console.log(id)
     try {
-        const docSnap = await getDoc(doc(db, "recipes", id));
-        if (docSnap.exists()) {
-            res.status(200).json(docSnap);  
+        const docSnap = await db.collection("recipes").doc(id).get();
+        if (docSnap) {
+            res.status(200).json(docSnap.data());
         } else {
-            console.log(`Document '${classID}' does not exist`);
-            res.status(500).json({ error: `Doc with id ${id} does not exist` });
+            console.log(`Document with id '${id}' does not exist`);
+            res.status(404).json({ error: `Document with id ${id} does not exist` });
         }
     } catch (err) {
+        console.error('Error fetching recipe:', err);
         res.status(500).json({ error: 'An error occurred while fetching data' });
     }
 });
+
 export default router;
