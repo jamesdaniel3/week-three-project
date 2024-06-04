@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import "../styles/RecipeForm.css";
 import "../styles/Index.css";
+import {
+    handleChange,
+    handleIngredientChange,
+    handleInstructionChange,
+    addIngredient,
+    removeIngredient,
+    addInstruction,
+    removeInstruction,
+    handleSubmit,
+} from "../utils/RecipeFormFunctions";
 
 export default function RecipeForm() {
     const [formData, setFormData] = useState({
@@ -9,85 +19,22 @@ export default function RecipeForm() {
         instructions: [""],
         glutenFree: false,
         vegetarian: false,
-        instructionsType: "write", // New state to track the selected instructions type
-        instructionsLink: "", // New state to store the website link
+        instructionsType: "write",
+        instructionsLink: "",
     });
-
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: type === "checkbox" ? checked : value,
-        }));
-    };
-
-    const handleIngredientChange = (index, e) => {
-        const { name, value } = e.target;
-        const newIngredients = [...formData.ingredients];
-        newIngredients[index][name] = value;
-        setFormData((prevData) => ({
-            ...prevData,
-            ingredients: newIngredients,
-        }));
-    };
-
-    const handleInstructionChange = (index, e) => {
-        const { value } = e.target;
-        const newInstructions = [...formData.instructions];
-        newInstructions[index] = value;
-        setFormData((prevData) => ({
-            ...prevData,
-            instructions: newInstructions,
-        }));
-    };
-
-    const addIngredient = () => {
-        setFormData((prevData) => ({
-            ...prevData,
-            ingredients: [...prevData.ingredients, { name: "", amount: "", unit: "" }],
-        }));
-    };
-
-    const removeIngredient = (index) => {
-        const newIngredients = formData.ingredients.filter((_, i) => i !== index);
-        setFormData((prevData) => ({
-            ...prevData,
-            ingredients: newIngredients,
-        }));
-    };
-
-    const addInstruction = () => {
-        setFormData((prevData) => ({
-            ...prevData,
-            instructions: [...prevData.instructions, ""],
-        }));
-    };
-
-    const removeInstruction = (index) => {
-        const newInstructions = formData.instructions.filter((_, i) => i !== index);
-        setFormData((prevData) => ({
-            ...prevData,
-            instructions: newInstructions,
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
-    };
 
     return (
         <div className="recipe-page">
             <div className="recipe-title">Create a Recipe</div>
             <div className="form-container">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={(e) => handleSubmit(e, formData)}>
                     <div className="section-header">
                         Name
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setFormData)}
                             className="input-field"
                         />
                     </div>
@@ -99,7 +46,7 @@ export default function RecipeForm() {
                                 name="name"
                                 placeholder="Ingredient Name"
                                 value={ingredient.name}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
                                 className="input-field"
                             />
                             <input
@@ -107,13 +54,13 @@ export default function RecipeForm() {
                                 name="amount"
                                 placeholder="Amount"
                                 value={ingredient.amount}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
                                 className="input-field"
                             />
                             <select
                                 name="unit"
                                 value={ingredient.unit}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
                                 className="input-field"
                             >
                                 <option value="">Select Unit</option>
@@ -130,13 +77,13 @@ export default function RecipeForm() {
                             <button
                                 type="button"
                                 className="remove-button"
-                                onClick={() => removeIngredient(index)}
+                                onClick={() => removeIngredient(index, formData, setFormData)}
                             >
                                 X
                             </button>
                         </div>
                     ))}
-                    <button type="button" onClick={addIngredient} className="add-button">
+                    <button type="button" onClick={() => addIngredient(setFormData)} className="add-button">
                         +
                     </button>
                     <div className="section-header">Instructions</div>
@@ -147,7 +94,7 @@ export default function RecipeForm() {
                             name="instructionsType"
                             value="write"
                             checked={formData.instructionsType === "write"}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setFormData)}
                             className="radio-input"
                         />
                         <label htmlFor="write" className="radio-label">Write your Own</label>
@@ -157,7 +104,7 @@ export default function RecipeForm() {
                             name="instructionsType"
                             value="link"
                             checked={formData.instructionsType === "link"}
-                            onChange={handleChange}
+                            onChange={(e) => handleChange(e, setFormData)}
                             className="radio-input"
                         />
                         <label htmlFor="link" className="radio-label">Link a Website</label>
@@ -170,13 +117,13 @@ export default function RecipeForm() {
                                     name="instruction"
                                     placeholder="Instruction"
                                     value={instruction}
-                                    onChange={(e) => handleInstructionChange(index, e)}
+                                    onChange={(e) => handleInstructionChange(index, e, formData, setFormData)}
                                     className="instruction-field"
                                 />
                                 <button
                                     type="button"
                                     className="remove-button"
-                                    onClick={() => removeInstruction(index)}
+                                    onClick={() => removeInstruction(index, formData, setFormData)}
                                 >
                                     X
                                 </button>
@@ -189,13 +136,13 @@ export default function RecipeForm() {
                                 name="instructionsLink"
                                 placeholder="Website Link"
                                 value={formData.instructionsLink}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e, setFormData)}
                                 className="input-field"
                             />
                         </div>
                     )}
                     {formData.instructionsType === "write" && (
-                        <button type="button" onClick={addInstruction} className="add-button">
+                        <button type="button" onClick={() => addInstruction(setFormData)} className="add-button">
                             +
                         </button>
                     )}
@@ -206,7 +153,7 @@ export default function RecipeForm() {
                                 type="checkbox"
                                 name="glutenFree"
                                 checked={formData.glutenFree}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e, setFormData)}
                                 className="checkbox"
                             />
                             This dish is gluten free
@@ -216,7 +163,7 @@ export default function RecipeForm() {
                                 type="checkbox"
                                 name="vegetarian"
                                 checked={formData.vegetarian}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e, setFormData)}
                                 className="checkbox"
                             />
                             This dish is vegetarian
