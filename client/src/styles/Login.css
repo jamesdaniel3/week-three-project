@@ -59,7 +59,7 @@
     border-radius: 4px;
     background-color: var(--white1);
     border: 2px solid var(--white5);
-    font-family: 'Radio Canada Big';
+    font-family: 'Radio Canada Big', serif;
     padding: 8px;
 }
 
@@ -83,7 +83,7 @@
     position: relative;
     font-size: 15px;
     transition: 0.3s;
-    font-family: "Radio Canada Big";
+    font-family: "Radio Canada Big", serif;
 }
 
 .login-button:hover {
@@ -95,6 +95,6 @@
     font-weight: 800;
     color: #a22725;
     width: 100%;
-    font-family: "Lora";
+    font-family: "Lora", serif;
     text-align: center
 }

@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.js";
 import axios from 'axios';
 import "../styles/Login.css";
-import "../styles/index.css"
+import "../styles/Index.css"
 
 const Login = () => {
     const [email, setUsername] = useState("");
