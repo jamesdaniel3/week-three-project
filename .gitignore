@@ -1,0 +1,4 @@
+/server/node_modules
+/server/.env
+/server/permissions.json
+/server/package-lock.json
