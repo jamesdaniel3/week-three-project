@@ -1,4 +1,5 @@
 import NavBar from "../components/Navbar.jsx";
+import RecipeForm from "../components/RecipeForm.jsx";
 import "../styles/Index.css"
 function CreateRecipe() {
 
@@ -7,7 +8,7 @@ function CreateRecipe() {
             <div className={"container"}>
                 <NavBar />
                 <div className="content">
-                    <p>This is the home page</p>
+                    <RecipeForm />
                 </div>
             </div>
         </>

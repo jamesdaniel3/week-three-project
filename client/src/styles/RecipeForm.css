@@ -1,0 +1,119 @@
+@import url(ColorPalette.css);
+
+.recipe-page {
+    position: relative;
+    margin: 2.5%;
+    height: 95%;
+    border-radius: 25px;
+    border: 2px solid var(--dbrown1);
+    background: var(--lbrown1)
+}
+
+.form-container {
+    max-height: 80%;
+    overflow-y: auto;
+    padding-bottom: 1rem; /* Space for the fixed button */
+}
+
+.recipe-title {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--dbrown1);
+    margin-top: 1rem;
+    margin-bottom: .3rem;
+}
+
+.section-header {
+    font-size: 1.5rem;
+    color: var(--dbrown1);
+    margin-top: .3rem;
+    margin-bottom: .3rem;
+    margin-left: 1rem;
+}
+
+.input-field {
+    width: 14rem;
+    height: 2.5rem;
+    border-radius: 4px;
+    background-color: var(--white1);
+    border: none;
+    font-family: 'Radio Canada Big', serif;
+    padding: 8px;
+    margin: .3rem .3rem .3rem 1rem;
+}
+
+.add-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--dbrown1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 1rem;
+}
+
+.submit-button {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--dbrown1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remove-button {
+    margin-left: 1rem;
+    padding: 0.5rem;
+    background-color: darkred;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.checkbox-container {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.checkbox {
+    margin-right: 0.5rem;
+}
+
+.checkbox:checked {
+    background-color: var(--dbrown1);
+}
+
+.instruction-number {
+    margin-right: 1rem;
+    margin-left: 1rem;
+    font-size: 1.2rem;
+    color: var(--dbrown1);
+}
+
+.instruction-field {
+    flex: 1;
+    margin-left: 1rem;
+    padding: 0.5rem;
+    height: 3rem;
+    resize: vertical;
+    border-radius: 4px;
+    background-color: var(--white1);
+    border: none;
+    width: 75%;
+}
+
+.ingredient-row, .instruction-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+}
