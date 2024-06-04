@@ -93,6 +93,9 @@ router.get("/recipe", async (req, res) => {
     }
 });
 
+/** 
+ * @Query : give ?userid=""&recipeid="" in parameters
+ */
 router.put("/add-favorite", async (req, res) => {
     const { userid, recipeid } = req.query;
     console.log(userid, recipeid);
