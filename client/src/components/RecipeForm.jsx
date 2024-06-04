@@ -148,7 +148,7 @@ export default function RecipeForm() {
                     )}
                     <div className="section-header">Dietary Notes</div>
                     <div className="checkbox-container">
-                        <label>
+                        <label className={"dietary-label"}>
                             <input
                                 type="checkbox"
                                 name="glutenFree"
@@ -158,7 +158,7 @@ export default function RecipeForm() {
                             />
                             This dish is gluten free
                         </label>
-                        <label>
+                        <label className={"dietary-label"}>
                             <input
                                 type="checkbox"
                                 name="vegetarian"
