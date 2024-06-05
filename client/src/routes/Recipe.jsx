@@ -1,13 +1,12 @@
 import NavBar from "../components/Navbar.jsx";
 import RecipeDisplay from "../components/RecipeDisplay.jsx";
 import "../styles/Index.css"
+import { useParams } from "react-router-dom";
 
 function Recipe() {
 
-    /*
-    The plan is to use useparam to get the information about the recipe from firebase/edamam by providing a UID in the
-    url. For now I am just going to pretend I had the data and build out the page.
-     */
+    const { id, location } = useParams();
+
 
     const recipe = {
         additionalNotes: "",

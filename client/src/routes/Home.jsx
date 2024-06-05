@@ -183,7 +183,7 @@ useEffect(() => {
                                         </ModalBody>
                                         <ModalFooter>
                                             
-                                            <Link to={`/recipe/${item.recipe.uri.split("recipe_")[1]}`}>
+                                            <Link to={`/recipe/${item.recipe.uri.split("recipe_")[1]}/edamam`}>
                                                 <button
                                                     style={{
                                                         backgroundColor:
