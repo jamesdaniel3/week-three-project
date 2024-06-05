@@ -1,10 +1,15 @@
-/* Main container for the recipe page */
-.recipe-page {
+.recipe-page-viewing {
     display: flex;
     flex-direction: row;
     width: 95%;
     padding: 20px;
     box-sizing: border-box;
+    position: relative;
+    margin: 2.5%;
+    height: 95%;
+    border-radius: 25px;
+    border: 2px solid var(--dbrown1);
+    background: var(--lbrown1);
 }
 
 /* Text content section */

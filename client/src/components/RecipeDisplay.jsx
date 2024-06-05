@@ -11,7 +11,7 @@ export default function RecipeDisplay({ recipe }) {
     };
 
     return (
-        <div className="recipe-page">
+        <div className="recipe-page-viewing">
             <div className="text-content">
                 <div className="recipe-title">{recipe.name}</div>
                 <div className="form-container">
