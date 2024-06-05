@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/ColorPalette.css";
 import "../styles/MyRecipes.css";
 import NavBar from "../components/Navbar.jsx";
+import "../styles/Index.css";
 
 const RecipeItem = ({ title, description }) => (
   <div className="recipe-item">

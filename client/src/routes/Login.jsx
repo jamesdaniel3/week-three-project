@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.js";
 import axios from 'axios';
 import "../styles/Login.css";
+import "../styles/Index.css"
 
 const Login = () => {
     const [email, setUsername] = useState("");
@@ -12,7 +13,7 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
-    // check if user is logged in and auto-populate
+    // Check if user is logged in and auto-populate
     useEffect(() => {
         if (auth) {
             auth.onAuthStateChanged(function (user) {
@@ -35,21 +36,23 @@ const Login = () => {
 
     const login = () => {
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => setUser(userCredential.user))
+            .then((userCredential) => {
+                setUser(userCredential.user);
+                return userCredential.user;
+            })
             .then(() => {
-                axios.get('http://localhost:8888/login')
-                    .then(response => {
-                        const adminEmails = response.data;
-                        if (adminEmails.includes(email)) {
-                            navigate('/admin');
-                        } else {
-                            navigate('/home');
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error fetching admin emails:", error);
-                        setErrorMessage("Error checking admin status");
-                    });
+                return axios.get('http://localhost:8888/login');
+            })
+            .then((user) => {
+                return axios.post('http://localhost:8888/login/findOrCreateUser', { email: email });
+            })
+            .then(response => {
+                const adminEmails = response.data;
+                if (adminEmails.includes(email)) {
+                    navigate('/admin');
+                } else {
+                    navigate('/home');
+                }
             })
             .catch((e) => {
                 if (e.code === "auth/invalid-email") {
