@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import "../styles/Index.css"
+import "../styles/Chatbot.css"
+
 export const ChatBot = ({recipe}) => {
     // Construct the ingredients string
     const ingredientsString = recipe.ingredients.map(ingredient => {

@@ -1,4 +1,43 @@
-@import url(ColorPalette.css);
+/* Main container for the recipe page */
+.recipe-page {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Text content section */
+.text-content {
+    flex: 0 0 60%; /* 60% width */
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+/* Chatbot section */
+.chatBot {
+    flex: 0 0 40%; /* 40% width */
+    padding: 20px;
+    box-sizing: border-box;
+    border: 2px solid var(--dbrown1);; /* Border color */
+    border-radius: 15px; /* Curved edges */
+}
+
+/* Additional styling for the chatbot content */
+.chatbot-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-content {
+    margin-bottom: 10px;
+    color: var(--dbrown1);
+}
+
+form {
+    margin-top: auto; /* Push form to the bottom */
+}
 
 .section-content {
     margin-left: 3rem;
