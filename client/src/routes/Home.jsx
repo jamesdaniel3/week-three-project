@@ -65,7 +65,6 @@ function Home() {
                     }
                 );
                 setRandomRecipes(response.data.hits);
-                console.log(response.data.hits);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
