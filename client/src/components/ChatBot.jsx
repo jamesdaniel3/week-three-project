@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import "../styles/Index.css"
-import "../styles/Chatbot.css"
+import "../styles/Index.css";
+import "../styles/Chatbot.css";
 
-export const ChatBot = ({recipe}) => {
+export const ChatBot = ({ recipe }) => {
     // Construct the ingredients string
     const ingredientsString = recipe.ingredients.map(ingredient => {
-        let unit = ingredient.Unit
-        if(ingredient.Amount === 1){
-            unit = unit.slice(0, unit.length - 1)
+        let unit = ingredient.Unit;
+        if (ingredient.Amount === 1) {
+            unit = unit.slice(0, unit.length - 1);
         }
         return `${ingredient.Amount} ${unit} of ${ingredient.Name}`;
     }).join(", ");
@@ -29,7 +29,7 @@ export const ChatBot = ({recipe}) => {
             messages: updatedMessages,
             model: "gpt-3.5-turbo",
         });
-        const assistantResponse = {role: "system", content: response.data};
+        const assistantResponse = { role: "system", content: response.data };
         setMessages((prevMessage) => [...prevMessage, assistantResponse]);
     };
 
@@ -41,17 +41,34 @@ export const ChatBot = ({recipe}) => {
 
     return (
         <div className={"chatbot-content"}>
-            <div>
-                {messages.map((msg, index) => (
-                    <div key={index}>
-                        <div className="message-content">{msg.role === "user" ? <p>You: </p> : <p>Assistant: </p>} {msg.content}</div>
+            <div className="message-container">
+                {messages.slice(1, messages.length).map((msg, index) => (
+                    <div key={index} className="message-content">
+                        <p>
+                            <span style={{ fontWeight: "bold" }}>
+                                {msg.role === "user" ? "You: " : "Assistant: "}
+                            </span>
+                            {msg.content.split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
+                            ))}
+                        </p>
                     </div>
                 ))}
             </div>
             <form onSubmit={submitForm}>
-                <label htmlFor="message">Enter message:</label>
-                <input id="message" type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-                <button type="submit">Submit!</button>
+                <input
+                    className={"text-input-chatbot"}
+                    id="message"
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                />
+                <button className={"submit-button-chatbot"} type="submit">
+                    Submit!
+                </button>
             </form>
         </div>
     );

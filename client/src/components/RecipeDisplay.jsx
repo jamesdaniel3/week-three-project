@@ -1,9 +1,15 @@
 import "../styles/Index.css";
 import "../styles/RecipeDisplay.css";
-import React from "react";
+import React, {useState} from "react";
 import { ChatBot } from "./ChatBot.jsx";
 
 export default function RecipeDisplay({ recipe }) {
+    const [showChatBot, setShowChatBot] = useState(false);
+
+    const handleButtonClick = () => {
+        setShowChatBot(true);
+    };
+
     return (
         <div className="recipe-page">
             <div className="text-content">
@@ -61,7 +67,13 @@ export default function RecipeDisplay({ recipe }) {
                 </div>
             </div>
             <div className="chatBot">
-                <ChatBot recipe={recipe} />
+                {showChatBot ? (
+                    <ChatBot recipe={recipe} />
+                ) : (
+                    <button className="chatbot-button" onClick={handleButtonClick}>
+                        Having Trouble? Use our ChatBot
+                    </button>
+                )}
             </div>
         </div>
     );
