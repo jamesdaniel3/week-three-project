@@ -32,46 +32,51 @@ function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [meal, setMealType] = useState("breakfast");
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
-useEffect(() => {
-    const fetchData = async () => {
-        const now = new Date();
-        const currentHour = now.getHours();
+    useEffect(() => {
+        const fetchData = async () => {
+            const now = new Date();
+            const currentHour = now.getHours();
 
-        const isWithinTimeRange = (startHour, endHour) => {
-            return currentHour >= startHour && currentHour < endHour;
+            const isWithinTimeRange = (startHour, endHour) => {
+                return currentHour >= startHour && currentHour < endHour;
+            };
+
+            const isMorning = isWithinTimeRange(5, 10);
+            const isAfternoon = isWithinTimeRange(10, 13);
+            const isEvening = isWithinTimeRange(13, 21);
+
+            if (isMorning) {
+                setMealType("breakfast");
+            } else if (isAfternoon) {
+                 setMealType("brunch");
+            } else if (isEvening) {
+                setMealType("lunch/dinner");
+            } else {
+                 setMealType("snack");
+            }
+
+            try {
+                const response = await axios.get(
+                    "http://localhost:8888/edamam/recipesearch",
+                    {
+                        params: { mealType: meal },
+                    }
+                );
+                setRandomRecipes(response.data.hits);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
 
-        const isMorning = isWithinTimeRange(5, 10);
-        const isAfternoon = isWithinTimeRange(10, 13);
-        const isEvening = isWithinTimeRange(13, 21);
+        fetchData();
+    }, []);
 
-        if (isMorning) {
-            setMealType("breakfast");
-        } else if (isAfternoon) {
-             setMealType("brunch");
-        } else if (isEvening) {
-            setMealType("lunch/dinner");
-        } else {
-             setMealType("snack");
-        }
-
-        try {
-            const response = await axios.get(
-                "http://localhost:8888/edamam/recipesearch",
-                {
-                    params: { mealType: meal },
-                }
-            );
-            setRandomRecipes(response.data.hits);
-            console.log(response.data.hits);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+    const handleOpenModal = (recipe) => {
+        setSelectedRecipe(recipe);
+        onOpen();
     };
-
-    fetchData();
-}, []);
 
     return (
         <>
@@ -109,7 +114,7 @@ useEffect(() => {
                                             height="8em"
                                             objectFit="cover"
                                             borderTopRadius="15"
-                                            onClick={onOpen}
+                                            onClick={() => handleOpenModal(item.recipe)}
                                         />
                                         <Box padding="0.5em">
                                             <Text textAlign="center">
@@ -123,7 +128,7 @@ useEffect(() => {
                                         </Box>
                                     </CardBody>
                                 </Card>
-                                <Modal
+                                {selectedRecipe && ( <Modal
                                     isOpen={isOpen}
                                     onClose={onClose}
                                     borderRadius="20px"
@@ -148,7 +153,7 @@ useEffect(() => {
                                             color="55423D"
                                             fontSize="2em"
                                         >
-                                            Recipe name
+                                            {selectedRecipe.label}
                                         </ModalHeader>
                                         <ModalBody marginLeft="1em">
                                             <div
@@ -182,8 +187,8 @@ useEffect(() => {
                                             </div>
                                         </ModalBody>
                                         <ModalFooter>
-                                            
-                                            <Link to={`/recipe/${item.recipe.uri}`}>
+
+                                            <Link to={`/recipe/${selectedRecipe.uri.split("#recipe_")[1]}/edamam`}>
                                                 <button
                                                     style={{
                                                         backgroundColor:
@@ -203,7 +208,8 @@ useEffect(() => {
                                             </Link>
                                         </ModalFooter>
                                     </ModalContent>
-                                </Modal>
+                                </Modal>)
+                                }
                             </div>
                         ))}
                     </div>

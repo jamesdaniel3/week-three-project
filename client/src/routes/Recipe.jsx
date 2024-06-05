@@ -1,38 +1,83 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import NavBar from "../components/Navbar.jsx";
 import RecipeDisplay from "../components/RecipeDisplay.jsx";
-import "../styles/Index.css"
+import "../styles/Index.css";
+import { useParams } from "react-router-dom";
 
 function Recipe() {
+    const { id, location } = useParams();
+    const [loading, setLoading] = useState(true);
+    const [recipe, setRecipe] = useState({});
+    const [error, setError] = useState(null);
 
-    /*
-    The plan is to use useparam to get the information about the recipe from firebase/edamam by providing a UID in the
-    url. For now I am just going to pretend I had the data and build out the page.
-     */
+    async function getFirebaseRecipe() {
+        try {
+            const response = await axios.get(`http://localhost:8888/recipefirebase/recipe`, {
+                params: {id}
+            });
+            const info = response.data;
+            setRecipe(info);
+        } catch {
+            console.error('Error fetching data:', error);
+            setError('An error occurred while fetching data');
+        } finally {
+            setLoading(false);
+        }
+    }
 
-    const recipe = {
-        additionalNotes: "",
-        calories: 200,
-        glutenFree: true,
-        vegetarian: false,
-        status: "ACCEPTED",
-        userCreated: true,
-        instructions: ["Step 1", "Step 2"],
-        instructionsLink: "https://ricorp.twa.rentmanager.com/Login?ReturnUrl=%2fShared%2fHome",
-        servings: 6,
-        name: "Overnight Oats",
-        ingredients: [
-            {
-                amount: 1,
-                name: "Oats",
-                unit: "Cups"
-            },
-            {
-                amount: 2,
-                name: "Peanut Butter",
-                unit: "Tablespoons"
+    async function getEdamamRecipe() {
+        try {
+            const response = await axios.get(`http://localhost:8888/edamam/by-id`, {
+                params: { id }
+            });
+            const info = response.data.recipe;
+
+            // Transform the info object into the desired recipe format
+            const transformedRecipe = {
+                calories: Math.round(info.calories / info.yield),
+                glutenFree: info.healthLabels.includes("Gluten-Free"),
+                vegetarian: info.healthLabels.includes("Vegetarian"),
+                name: info.label,
+                servings: info.yield,
+                instructionsLink: info.url,
+                instructions: [],
+                ingredients: info.ingredientLines.map(line => ({
+                    text: line
+                })),
+                additionalNotes: "",
+                status: "OLD",
+                userCreated: false
+            };
+
+            setRecipe(transformedRecipe);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setError('An error occurred while fetching data');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        const fetchRecipe = async () => {
+            if (location === "edamam") {
+                await getEdamamRecipe()
             }
-        ]
+            if (location === "firebase"){
+                await getFirebaseRecipe();
+            }
+        };
 
+        fetchRecipe();
+    }, [id, location]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
     }
 
     return (
@@ -40,11 +85,11 @@ function Recipe() {
             <div className={"container"}>
                 <NavBar />
                 <div className="content">
-                    <RecipeDisplay recipe={recipe}/>
+                    {recipe ? <RecipeDisplay recipe={recipe} /> : <div>No recipe found</div>}
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Recipe;
