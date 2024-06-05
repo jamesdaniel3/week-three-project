@@ -1,6 +1,8 @@
+import React from 'react';
 import NavBar from "../components/Navbar.jsx";
 import "../styles/Index.css";
 import "../styles/Admin.css"; 
+import chefLogo from '../assets/chef.png'; 
 
 function Admin() {
     return (
@@ -13,7 +15,9 @@ function Admin() {
                     <div className="add-button">+</div>
                     <div className="user-profiles">
                         <div className="user-profile">
-                            <div className="user-icon">USER</div>
+                            <div className="user-icon">
+                                <img src={chefLogo} alt="User Icon" className="user-icon-img" />
+                            </div>
                             <div className="recipe-details">
                                 <p>Recipe Name</p>
                                 <p>Recipe details...</p>
@@ -24,7 +28,9 @@ function Admin() {
                             </div>
                         </div>
                         <div className="user-profile">
-                            <div className="user-icon">USER</div>
+                            <div className="user-icon">
+                                <img src={chefLogo} alt="User Icon" className="user-icon-img" />
+                            </div>
                             <div className="recipe-details">
                                 <p>Recipe Name</p>
                                 <p>Recipe details...</p>
@@ -35,7 +41,9 @@ function Admin() {
                             </div>
                         </div>
                         <div className="user-profile">
-                            <div className="user-icon">USER</div>
+                            <div className="user-icon">
+                                <img src={chefLogo} alt="User Icon" className="user-icon-img" />
+                            </div>
                             <div className="recipe-details">
                                 <p>Recipe Name</p>
                                 <p>Recipe details...</p>
