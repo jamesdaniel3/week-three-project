@@ -3,25 +3,35 @@ import "../styles/RecipeForm.css";
 import "../styles/Index.css";
 import {
     handleChange,
+    handleSubmit,
     handleIngredientChange,
     handleInstructionChange,
     addIngredient,
     removeIngredient,
     addInstruction,
     removeInstruction,
-    handleSubmit,
 } from "../utils/RecipeFormFunctions";
 
+const initialFormData = {
+    name: "",
+    servings: "",
+    calories: "",
+    ingredients: [{ name: "", amount: "", unit: "" }],
+    instructions: [""],
+    glutenFree: false,
+    vegetarian: false,
+    instructionsType: "write",
+    instructionsLink: "",
+};
+
 export default function RecipeForm() {
-    const [formData, setFormData] = useState({
-        name: "",
-        ingredients: [{ name: "", amount: "", unit: "" }],
-        instructions: [""],
-        glutenFree: false,
-        vegetarian: false,
-        instructionsType: "write",
-        instructionsLink: "",
-    });
+    const [formData, setFormData] = useState(initialFormData);
+
+    const handleFormSubmit = (e) => {
+        handleSubmit(e, formData);
+        setFormData(initialFormData); // Reset the form data to initial state
+    };
+
 
     return (
         <div className="recipe-page">
@@ -36,6 +46,30 @@ export default function RecipeForm() {
                             value={formData.name}
                             onChange={(e) => handleChange(e, setFormData)}
                             className="input-field"
+                            required
+                        />
+                    </div>
+                    <div className="section-header">
+                        Servings
+                        <input
+                            type="number"
+                            name="servings"
+                            value={formData.servings}
+                            onChange={(e) => handleChange(e, setFormData)}
+                            className="input-field"
+                            min={0}
+                            step={0.25}
+                        />
+                    </div>
+                    <div className="section-header">
+                        Calories per serving
+                        <input
+                            type="number"
+                            name="calories"
+                            value={formData.calories}
+                            onChange={(e) => handleChange(e, setFormData)}
+                            className="input-field"
+                            min={0}
                         />
                     </div>
                     <div className="section-header">Ingredients</div>
@@ -50,12 +84,14 @@ export default function RecipeForm() {
                                 className="input-field"
                             />
                             <input
-                                type="text"
+                                type="number"
                                 name="amount"
                                 placeholder="Amount"
                                 value={ingredient.amount}
                                 onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
                                 className="input-field"
+                                min={0}
+                                step={0.25}
                             />
                             <select
                                 name="unit"
@@ -169,7 +205,7 @@ export default function RecipeForm() {
                             This dish is vegetarian
                         </label>
                     </div>
-                    <button type="submit" className="submit-button">
+                    <button type="submit" className="submit-button" onClick={handleFormSubmit}>
                         Submit
                     </button>
                 </form>
