@@ -10,13 +10,14 @@ const appkey = process.env.EDAMAM_APP_KEY;
 const router = express.Router();
 
 /**
- * @body : example { diet: "balanced", health: "dairy-free", cuisineType: "american" }
+ * @query : example { params: { q: query } }
  */
-router.get('/recipiesearch', async (req, res) => {
+router.get('/recipesearch', async (req, res) => {
     try {
-        const filterParams = req.query.filterParams || { diet: "balanced" };
+        const filterParams = req.query || { diet: "balanced" };
         const query = querystring.stringify(filterParams);
-        const response = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&app_id=${appid}&app_key=${appkey}&${query}`);
+        const url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${appid}&app_key=${appkey}&${query}`;
+        const response = await axios.get(url);
         
         res.status(200).json(response.data);
     } catch (error) {
