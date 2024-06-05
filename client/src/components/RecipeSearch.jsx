@@ -24,14 +24,14 @@ const RecipeSearch = () => {
   const [loading, setLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect( () => {
-    const fetchData = async () => {
-      const response = await axios.get('http://localhost:8888/edamam/recipesearch', { params: {diet: "balanced"}});
-    setSearchResults(response.data.hits);  
-    console.log(response.data);
-    }
-    fetchData();
-  },[]);
+//   useEffect( () => {
+//     const fetchData = async () => {
+//       const response = await axios.get('http://localhost:8888/edamam/recipesearch', { params: {diet: "balanced"}});
+//     setSearchResults(response.data.hits);  
+//     console.log(response.data);
+//     }
+//     fetchData();
+//   },[]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
