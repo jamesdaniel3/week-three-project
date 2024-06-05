@@ -9,16 +9,6 @@ export const handleChange = (e, setFormData) => {
     }));
 };
 
-export const handleIngredientChange = (index, e, formData, setFormData) => {
-    const { name, value } = e.target;
-    const newIngredients = [...formData.ingredients];
-    newIngredients[index][name] = value;
-    setFormData((prevData) => ({
-        ...prevData,
-        ingredients: newIngredients,
-    }));
-};
-
 export const handleInstructionChange = (index, e, formData, setFormData) => {
     const { value } = e.target;
     const newInstructions = [...formData.instructions];
@@ -26,21 +16,6 @@ export const handleInstructionChange = (index, e, formData, setFormData) => {
     setFormData((prevData) => ({
         ...prevData,
         instructions: newInstructions,
-    }));
-};
-
-export const addIngredient = (setFormData) => {
-    setFormData((prevData) => ({
-        ...prevData,
-        ingredients: [...prevData.ingredients, { name: "", amount: "", unit: "" }],
-    }));
-};
-
-export const removeIngredient = (index, formData, setFormData) => {
-    const newIngredients = formData.ingredients.filter((_, i) => i !== index);
-    setFormData((prevData) => ({
-        ...prevData,
-        ingredients: newIngredients,
     }));
 };
 
@@ -59,12 +34,29 @@ export const removeInstruction = (index, formData, setFormData) => {
     }));
 };
 
+export const handleIngredientChange = (e, index, setFormData, formData) => {
+    const { name, value } = e.target;
+    const ingredients = [...formData.ingredients];
+    ingredients[index] = { ...ingredients[index], [name]: value };
+    setFormData({ ...formData, ingredients });
+};
+
+export const addIngredient = (setFormData, formData) => {
+    const ingredients = [...formData.ingredients, { name: "", amount: "", unit: "" }];
+    setFormData({ ...formData, ingredients });
+};
+
+export const removeIngredient = (index, setFormData, formData) => {
+    const ingredients = formData.ingredients.filter((_, i) => i !== index);
+    setFormData({ ...formData, ingredients });
+};
+
 export const handleSubmit = (e, formData) => {
     e.preventDefault();
 
     const auth = getAuth();
     const user = auth.currentUser;
-    formData["user_uid"] = auth.currentUser.uid
+    formData["user_uid"] = user.uid;
 
     axios.post('http://localhost:8888/recipefirebase/create-recipe', formData)
         .then(response => {

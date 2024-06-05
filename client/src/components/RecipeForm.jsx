@@ -32,15 +32,15 @@ export default function RecipeForm() {
 
     const handleFormSubmit = (e) => {
         handleSubmit(e, formData);
-        setFormData(initialFormData); // Reset the form data to initial state
+        // Create a deep copy of initialFormData to reset the form
+        setFormData(JSON.parse(JSON.stringify(initialFormData)));
     };
-
 
     return (
         <div className="recipe-page">
             <div className="recipe-title">Create a Recipe</div>
             <div className="form-container">
-                <form onSubmit={(e) => handleSubmit(e, formData)}>
+                <form onSubmit={handleFormSubmit}>
                     <div className="section-header">
                         Name
                         <input
@@ -83,7 +83,7 @@ export default function RecipeForm() {
                                 name="name"
                                 placeholder="Ingredient Name"
                                 value={ingredient.name}
-                                onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
+                                onChange={(e) => handleIngredientChange(e, index, setFormData, formData)}
                                 className="input-field"
                             />
                             <input
@@ -91,7 +91,7 @@ export default function RecipeForm() {
                                 name="amount"
                                 placeholder="Amount"
                                 value={ingredient.amount}
-                                onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
+                                onChange={(e) => handleIngredientChange(e, index, setFormData, formData)}
                                 className="input-field"
                                 min={0}
                                 step={0.25}
@@ -99,7 +99,7 @@ export default function RecipeForm() {
                             <select
                                 name="unit"
                                 value={ingredient.unit}
-                                onChange={(e) => handleIngredientChange(index, e, formData, setFormData)}
+                                onChange={(e) => handleIngredientChange(e, index, setFormData, formData)}
                                 className="input-field"
                             >
                                 <option value="">Select Unit</option>
@@ -118,13 +118,13 @@ export default function RecipeForm() {
                             <button
                                 type="button"
                                 className="remove-button"
-                                onClick={() => removeIngredient(index, formData, setFormData)}
+                                onClick={() => removeIngredient(index, setFormData, formData)}
                             >
                                 X
                             </button>
                         </div>
                     ))}
-                    <button type="button" onClick={() => addIngredient(setFormData)} className="new-row-button">
+                    <button type="button" onClick={() => addIngredient(setFormData, formData)} className="new-row-button">
                         +
                     </button>
                     <div className="section-header">Instructions</div>
@@ -210,7 +210,7 @@ export default function RecipeForm() {
                             This dish is vegetarian
                         </label>
                     </div>
-                    <button type="submit" className="submit-button" onClick={handleFormSubmit}>
+                    <button type="submit" className="submit-button">
                         Submit
                     </button>
                 </form>
