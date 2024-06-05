@@ -12,7 +12,6 @@ router.get("/", async (req, res) => {
             return res.status(404).send('No admin list found');
         }
         const adminEmails = adminDoc.data().admin_list;
-        console.log(adminEmails);
         res.status(200).json(adminEmails);
     } catch (error) {
         res.status(500).send(error.message);
