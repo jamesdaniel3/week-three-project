@@ -1,9 +1,12 @@
-import "../styles/Index.css"
-import "../styles/RecipeDisplay.css"
+import "../styles/Index.css";
+import "../styles/RecipeDisplay.css";
 import React from "react";
+import { ChatBot } from "./ChatBot.jsx";
 
-export default function RecipeDisplay({recipe}){
-    console.log(recipe);
+// add in outside links and potentially pictures
+
+export default function RecipeDisplay({ recipe }) {
+
     return (
         <div className="recipe-page">
             <div className="recipe-title">{recipe.name}</div>
@@ -20,19 +23,45 @@ export default function RecipeDisplay({recipe}){
                 <div className="section">
                     <p className={"section-header"}>Ingredients</p>
                     <div className={"section-content"}>
+                        <ul>
+                            {recipe.ingredients.map((ingredient, index) => {
+                                let unit = ingredient.Unit
+                                if(ingredient.Amount === 1){
+                                    unit = unit.slice(0, unit.length - 1)
+                                }
+                                return (
+                                    <li key={index}>
+                                        {ingredient.Amount} {unit} of {ingredient.Name}
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     </div>
                 </div>
                 <div className="section">
                     <p className={"section-header"}>Instructions</p>
                     <div className={"section-content"}>
+                        <ol>
+                            {recipe.instructions.map((instruction, index) => {
+                                return (
+                                    <li key={index}>
+                                        {instruction}
+                                    </li>
+                                );
+                            })}
+                        </ol>
                     </div>
                 </div>
-                <div className="section">
-                    <p className={"section-header"}>Additional Notes</p>
-                    <div className={"section-content"}>
+                {recipe.additionalNotes &&
+                    <div className="section">
+                        <p className={"section-header"}>Additional Notes</p>
+                        <div className={"section-content"}>
+                            <p>{recipe.additionalNotes}</p>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
+            <ChatBot recipe={recipe} />
         </div>
     );
 }
