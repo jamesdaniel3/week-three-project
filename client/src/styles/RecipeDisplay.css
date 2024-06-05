@@ -1,0 +1,7 @@
+@import url(ColorPalette.css);
+
+.section-content {
+    margin-left: 3rem;
+    color: var(--dbrown1);
+    font-size: 1rem;
+}
