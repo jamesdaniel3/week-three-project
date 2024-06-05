@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 export const handleChange = (e, setFormData) => {
     const { name, value, type, checked } = e.target;
@@ -60,7 +61,11 @@ export const removeInstruction = (index, formData, setFormData) => {
 
 export const handleSubmit = (e, formData) => {
     e.preventDefault();
-    console.log(formData)
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    formData["user_uid"] = auth.currentUser.uid
+
     axios.post('http://localhost:8888/recipefirebase/create-recipe', formData)
         .then(response => {
             console.log('Recipe created successfully:', response.data);

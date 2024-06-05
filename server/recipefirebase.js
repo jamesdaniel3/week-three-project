@@ -1,5 +1,6 @@
 import express from "express";
 import { db } from "./firebase.js";
+import admin from "firebase-admin";
 
 const router = express.Router();
 
@@ -24,14 +25,30 @@ router.get('/recipes', async (req, res) => {
     }
 });
 
-/** 
- * @Body : Object of the recipe doc
+/**
+ * This endpoint is meant to be used when a user creates a recipe on the website. It first creates the recipe document in
+ * firebase with the relevant fields, and then it adds the ID of the document it created to the createdRecipes array in
+ * the document of the user who created it.
+ *
+ * @Body : Object of the recipe doc and user uid of the sender
  */
 router.post("/create-recipe", async (req, res) => {
     try {
+        const user_uid = req.body.user_uid;
+        delete req.body.user_uid
+
         const recipe = req.body; // Object of the doc
         delete recipe.instructionsType
+
+        // add recipe document to collection
         const docRef = await db.collection("recipes").add(recipe);
+
+        // Update the user's document
+        const userDocRef = db.collection('users').doc(user_uid);
+        await userDocRef.update({
+            createdRecipes: admin.firestore.FieldValue.arrayUnion(docRef.id)
+        });
+
         res.status(200).json({ id: docRef.id, message: `Successfully created recipe with id ${docRef.id}` });
     } catch (err) {
         console.error('Error creating recipe:', err);
