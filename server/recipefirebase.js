@@ -62,8 +62,7 @@ router.post("/create-recipe", async (req, res) => {
 router.delete("/delete-recipe", async (req, res) => {
     const { id } = req.body;
     try {
-        await deleteDoc(doc(db, "recipes", id));
-        await db.collection("recipes").delete(id);
+        await db.collection("recipes").doc(id).delete();
         res.status(200).json({ message: `Successfully deleted recipe with id ${id}` });
     } catch (err) {
         console.error('Error deleting recipe:', err);
@@ -160,4 +159,19 @@ router.put("/add-created", async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 });
+
+/**
+ * @Body : id of the recipe doc and status to update
+ */
+router.put("/update-recipe-status", async (req, res) => {
+    const { id, status } = req.body;
+    try {
+        await db.collection('recipes').doc(id).update({ status });
+        res.status(200).json({ message: `Successfully updated recipe with id ${id} to status ${status}` });
+    } catch (err) {
+        console.error('Error updating recipe status:', err);
+        res.status(400).json({ error: err.message });
+    }
+});
+
 export default router;
