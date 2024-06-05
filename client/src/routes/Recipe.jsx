@@ -30,11 +30,8 @@ function Recipe() {
                         servings: info.yield,
                         instructionsLink: info.url,
                         instructions: [],
-                        ingredients: info.ingredients.map(item => ({
-                            name: item.food,
-                            amount: item.quantity,
-                            unit: item.measure,
-                            text: item.text,
+                        ingredients: info.ingredientLines.map(line => ({
+                            text: line
                         })),
                         additionalNotes: "",
                         status: "OLD",
