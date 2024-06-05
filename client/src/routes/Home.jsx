@@ -1,5 +1,7 @@
 import NavBar from "../components/Navbar.jsx";
+import React, { useState, useEffect } from "react";
 import "../styles/Home.css";
+import axios from "axios";
 import {
     Modal,
     ModalOverlay,
@@ -21,6 +23,7 @@ import {
     Heading,
     Divider,
     Center,
+    Box,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import img from "../assets/zdz9mr_blackBear.png";
@@ -28,6 +31,39 @@ import img from "../assets/zdz9mr_blackBear.png";
 function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const arr = ["name", "name", "name", "name", "name"];
+    const [randomRecipes, setRandomRecipes] = useState([]);
+
+    const isWithinTimeRange = (startHour, endHour) => {
+        return currentHour >= startHour && currentHour < endHour;
+    };
+
+    useEffect(() => {
+        // const now = new Date();
+        // const currentHour = now.getHours();
+        // const isMorning = isWithinTimeRange(0, 11);
+        // const isAfternoon = isWithinTimeRange(11, 15);
+        // const isEvening = isWithinTimeRange(15, 24);
+
+        const fetchData = async () => {
+
+            // if(isMorning) {
+
+            // }
+            // if (isAfternoon) {
+            // }
+            // if (isEvening) {
+            // }
+            // else {
+            const response = await axios.get(
+                "http://localhost:8888/edamam/recipesearch",
+                { params: { diet: "balanced" } }
+
+            );
+            setRandomRecipes(response.data.hits);
+            console.log(response.data.hits);
+        };
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -45,12 +81,12 @@ function Home() {
                             justifyContent: "center",
                         }}
                     >
-                        {arr.map((item) => (
-                            <div key={item.name}>
+                        {randomRecipes.map((item) => (
+                            <div key={item.recipe.uri}>
                                 <Card
                                     bg="#EADDCF"
-                                    width="12em"
-                                    height="10em"
+                                    width="14em"
+                                    height="12em"
                                     borderRadius="15"
                                     marginTop="30px"
                                     marginRight="5px"
@@ -58,19 +94,28 @@ function Home() {
                                 >
                                     <CardBody>
                                         <Image
-                                            src={img}
+                                            src={item.recipe.images.SMALL.url}
                                             width="100%"
-                                            height="55%"
+                                            height="8em" // Set a fixed height for the image
+                                            objectFit="cover" // Maintain aspect ratio while filling the specified height
                                             borderTopRadius="15"
                                             onClick={onOpen}
                                         />
-                                        <Text marginLeft="15px">{item}</Text>
+                                        <Box padding="0.5em">
+                                            <Text textAlign="center">
+                                                {item.recipe.label.length > 55
+                                                    ? `${item.recipe.label.slice(
+                                                          0,
+                                                          55
+                                                      )}...`
+                                                    : item.recipe.label}
+                                            </Text>
+                                        </Box>
                                     </CardBody>
                                 </Card>
                             </div>
                         ))}
-                    </div>
-                    <Modal
+                         <Modal
                         isOpen={isOpen}
                         onClose={onClose}
                         borderRadius="20px"
@@ -99,9 +144,9 @@ function Home() {
                             <ModalBody marginLeft="1em">
                                 <div
                                     style={{
-                                        position: "absolute", 
-                                        top: "2.5rem", 
-                                        left: ".5rem", 
+                                        position: "absolute",
+                                        top: "2.5rem",
+                                        left: ".5rem",
                                     }}
                                 >
                                     Ingredients:{" "}
@@ -128,7 +173,7 @@ function Home() {
                                 </div>
                             </ModalBody>
                             <ModalFooter>
-                                <Link to="/find-recipes"> 
+                                <Link to="/find-recipes">
                                     <button
                                         style={{
                                             backgroundColor: "#55423D",
@@ -148,6 +193,8 @@ function Home() {
                             </ModalFooter>
                         </ModalContent>
                     </Modal>
+                    </div>
+                   
                 </div>
             </div>
         </>

@@ -1,0 +1,22 @@
+.text-input-chatbot{
+    width: 75%;
+    height: 2.5rem;
+    border-radius: 4px;
+    background-color: var(--white1);
+    border: none;
+    font-family: 'Radio Canada Big', serif;
+    padding: 8px;
+    margin: 0.3rem 0.3rem 0.3rem 1rem;
+    color: var(--dbrown1);
+}
+
+.submit-button-chatbot{
+    padding: .5rem 1rem;
+    background-color: var(--dbrown1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Radio Canada Big', serif;
+}
