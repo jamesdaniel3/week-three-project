@@ -119,7 +119,7 @@ export default function RecipeForm() {
                             </button>
                         </div>
                     ))}
-                    <button type="button" onClick={() => addIngredient(setFormData)} className="add-button">
+                    <button type="button" onClick={() => addIngredient(setFormData)} className="new-row-button">
                         +
                     </button>
                     <div className="section-header">Instructions</div>
@@ -178,7 +178,7 @@ export default function RecipeForm() {
                         </div>
                     )}
                     {formData.instructionsType === "write" && (
-                        <button type="button" onClick={() => addInstruction(setFormData)} className="add-button">
+                        <button type="button" onClick={() => addInstruction(setFormData)} className="new-row-button">
                             +
                         </button>
                     )}
