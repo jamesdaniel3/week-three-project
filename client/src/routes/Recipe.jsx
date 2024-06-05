@@ -11,40 +11,61 @@ function Recipe() {
     const [recipe, setRecipe] = useState({});
     const [error, setError] = useState(null);
 
+    async function getFirebaseRecipe() {
+        try {
+            const response = await axios.get(`http://localhost:8888/recipefirebase/recipe`, {
+                params: {id}
+            });
+            const info = response.data;
+            setRecipe(info);
+        } catch {
+            console.error('Error fetching data:', error);
+            setError('An error occurred while fetching data');
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getEdamamRecipe() {
+        try {
+            const response = await axios.get(`http://localhost:8888/edamam/by-id`, {
+                params: { id }
+            });
+            const info = response.data.recipe;
+
+            // Transform the info object into the desired recipe format
+            const transformedRecipe = {
+                calories: Math.round(info.calories / info.yield),
+                glutenFree: info.healthLabels.includes("Gluten-Free"),
+                vegetarian: info.healthLabels.includes("Vegetarian"),
+                name: info.label,
+                servings: info.yield,
+                instructionsLink: info.url,
+                instructions: [],
+                ingredients: info.ingredientLines.map(line => ({
+                    text: line
+                })),
+                additionalNotes: "",
+                status: "OLD",
+                userCreated: false
+            };
+
+            setRecipe(transformedRecipe);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setError('An error occurred while fetching data');
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         const fetchRecipe = async () => {
             if (location === "edamam") {
-                try {
-                    const response = await axios.get(`http://localhost:8888/edamam/by-id`, {
-                        params: { id }
-                    });
-                    const info = response.data.recipe;
-                    console.log(info);
-
-                    // Transform the info object into the desired recipe format
-                    const transformedRecipe = {
-                        calories: Math.round(info.calories / info.yield),
-                        glutenFree: info.healthLabels.includes("Gluten-Free"),
-                        vegetarian: info.healthLabels.includes("Vegetarian"),
-                        name: info.label,
-                        servings: info.yield,
-                        instructionsLink: info.url,
-                        instructions: [],
-                        ingredients: info.ingredientLines.map(line => ({
-                            text: line
-                        })),
-                        additionalNotes: "",
-                        status: "OLD",
-                        userCreated: false
-                    };
-
-                    setRecipe(transformedRecipe);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                    setError('An error occurred while fetching data');
-                } finally {
-                    setLoading(false);
-                }
+                await getEdamamRecipe()
+            }
+            if (location === "firebase"){
+                await getFirebaseRecipe();
             }
         };
 
