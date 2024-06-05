@@ -44,7 +44,6 @@ const Login = () => {
                 return axios.get('http://localhost:8888/login');
             })
             .then((user) => {
-                // Call the new API endpoint to find or create user document
                 return axios.post('http://localhost:8888/login/findOrCreateUser', { email: email });
             })
             .then(response => {
