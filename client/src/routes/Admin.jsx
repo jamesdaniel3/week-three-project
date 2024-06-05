@@ -4,14 +4,13 @@ import "../styles/Index.css";
 import "../styles/Admin.css"; 
 import chefLogo from '../assets/chef.png'; 
 import plusIcon from '../assets/plus.png'; 
-import { db } from '../firebase'; // Import Firestore
+import { db } from '../firebase'; 
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; // Import Firestore functions
-import axios from 'axios'; // Import Axios directly
+import axios from 'axios'; 
 
 function Admin() {
     const [recipes, setRecipes] = useState([]);
 
-    // Fetch user-created recipes with status "NEW"
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
@@ -19,7 +18,7 @@ function Admin() {
                 const querySnapshot = await getDocs(q);
                 const newRecipes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 setRecipes(newRecipes);
-                console.log(newRecipes); // Log the fetched recipes
+                console.log(newRecipes); 
             } catch (error) {
                 console.error("Error fetching recipes: ", error);
             }
@@ -57,7 +56,7 @@ function Admin() {
                 <div className="content">
                     <h1 className="admin-title">Cheffed</h1>
                     <h2 className="admin-subtitle">Admin</h2>
-                    <img src={plusIcon} alt="Add" className="add-button" /> {/* Use the plus icon */}
+                    <img src={plusIcon} alt="Add" className="add-button" /> {/* plus */}
                     <div className="user-profiles">
                         {recipes.map(recipe => (
                             <div className="user-profile" key={recipe.id}>

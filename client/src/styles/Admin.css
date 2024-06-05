@@ -69,13 +69,13 @@
     font-weight: bold;
     color: white;
     margin-right: 10px;
-    overflow: hidden; /* Ensure the image fits within the circle */
+    overflow: hidden;
 }
 
 .user-icon-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensure the image covers the entire area */
+    object-fit: cover; 
 }
 
 .recipe-details {

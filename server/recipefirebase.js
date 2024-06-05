@@ -4,9 +4,7 @@ import admin from "firebase-admin";
 
 const router = express.Router();
 
-/**
- * @Return : list of all recipes
- */
+
 router.get('/recipes', async (req, res) => {
     try {
         let ret = [];
@@ -25,25 +23,17 @@ router.get('/recipes', async (req, res) => {
     }
 });
 
-/**
- * This endpoint is meant to be used when a user creates a recipe on the website. It first creates the recipe document in
- * firebase with the relevant fields, and then it adds the ID of the document it created to the createdRecipes array in
- * the document of the user who created it.
- *
- * @Body : Object of the recipe doc and user uid of the sender
- */
+
 router.post("/create-recipe", async (req, res) => {
     try {
         const user_uid = req.body.user_uid;
         delete req.body.user_uid
 
-        const recipe = req.body; // Object of the doc
+        const recipe = req.body; 
         delete recipe.instructionsType
 
-        // add recipe document to collection
         const docRef = await db.collection("recipes").add(recipe);
 
-        // Update the user's document
         const userDocRef = db.collection('users').doc(user_uid);
         await userDocRef.update({
             createdRecipes: admin.firestore.FieldValue.arrayUnion(docRef.id)
@@ -56,9 +46,6 @@ router.post("/create-recipe", async (req, res) => {
     }
 });
 
-/** 
- * @Body : id of the recipe doc
- */
 router.delete("/delete-recipe", async (req, res) => {
     const { id } = req.body;
     try {
@@ -70,10 +57,7 @@ router.delete("/delete-recipe", async (req, res) => {
     }
 });
 
-/** 
- * @Query : give the id for a user
- * @Return : list of IDs of recipes
- */
+
 router.get("/user-favorites", async (req, res) => {
     const { id } = req.query;
     try {
@@ -90,10 +74,7 @@ router.get("/user-favorites", async (req, res) => {
     }
 });
 
-/** 
- * @Query : give ID of recipe
- * @Return : JSON object of recipe
- */
+
 router.get("/recipe", async (req, res) => {
     const { id } = req.query;
     try {
@@ -110,9 +91,7 @@ router.get("/recipe", async (req, res) => {
     }
 });
 
-/** 
- * @Query : give ?userid=""&recipeid="" in parameters
- */
+
 router.put("/add-favorite", async (req, res) => {
     const { userid, recipeid } = req.query;
     console.log(userid, recipeid);
@@ -135,9 +114,7 @@ router.put("/add-favorite", async (req, res) => {
     }
 });
 
-/** 
- * @Query : give ?userid=""&recipeid="" in parameters
- */
+
 router.put("/add-created", async (req, res) => {
     const { userid, recipeid } = req.query;
     console.log(userid, recipeid);
@@ -160,9 +137,7 @@ router.put("/add-created", async (req, res) => {
     }
 });
 
-/**
- * @Body : id of the recipe doc and status to update
- */
+
 router.put("/update-recipe-status", async (req, res) => {
     const { id, status } = req.body;
     try {
