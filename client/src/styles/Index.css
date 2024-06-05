@@ -18,9 +18,15 @@ html, body {
 }
 
 .content {
-    margin-left: 305px; /* Same width as the navbar */
+    margin-left: 70px; 
     padding: 20px;
-    width: calc(100% - 305px); /* Adjust width to account for the navbar */
+    width: calc(100% - 70px); 
     height: 100vh;
     overflow-y: auto;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.main:hover + .content {
+    margin-left: 200px; 
+    width: calc(100% - 200px); 
 }

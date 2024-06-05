@@ -22,11 +22,12 @@ import {
     Divider,
     Center,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import img from "../assets/zdz9mr_blackBear.png";
 
 function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const arr = ["name", "name", "name", "name"];
+    const arr = ["name", "name", "name", "name", "name"];
 
     return (
         <>
@@ -35,13 +36,12 @@ function Home() {
                 <div className="content">
                     <h1>Cheffed</h1>
                     <h3>Your digital cookbook</h3>
-
                     <div
                         style={{
                             display: "flex",
                             flexDirection: "row",
                             flexWrap: "wrap",
-                            gap: "10px",
+                            gap: "1em",
                             justifyContent: "center",
                         }}
                     >
@@ -49,11 +49,11 @@ function Home() {
                             <div key={item.name}>
                                 <Card
                                     bg="#EADDCF"
-                                    width="200px"
-                                    height="175px"
+                                    width="12em"
+                                    height="10em"
                                     borderRadius="15"
                                     marginTop="30px"
-                                    marginRight="15px"
+                                    marginRight="5px"
                                     onClick={onOpen}
                                 >
                                     <CardBody>
@@ -89,15 +89,62 @@ function Home() {
                             bg="#EADDCF"
                             borderRadius="20px"
                         >
-                            <ModalHeader textAlign="center" color="55423D">
+                            <ModalHeader
+                                textAlign="center"
+                                color="55423D"
+                                fontSize="2em"
+                            >
                                 Recipe name
                             </ModalHeader>
-                            <ModalBody></ModalBody>
-
+                            <ModalBody marginLeft="1em">
+                                <div
+                                    style={{
+                                        position: "absolute", 
+                                        top: "2.5rem", 
+                                        left: ".5rem", 
+                                    }}
+                                >
+                                    Ingredients:{" "}
+                                </div>
+                                <br />
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        bottom: "2.5rem",
+                                        left: ".5rem",
+                                    }}
+                                >
+                                    Servings:
+                                </div>
+                                <br />
+                                <div
+                                    style={{
+                                        position: "absolute", // Add this line
+                                        bottom: ".9rem", // Add this line
+                                        left: ".5rem", // Add this line
+                                    }}
+                                >
+                                    Calories/serving:
+                                </div>
+                            </ModalBody>
                             <ModalFooter>
-                                <button style={{ backgroundColor: "#55423D", color:"#EADDCF",borderRadius:"10px", height:"2em",width:"7em", border:"none", marginTop:"11em", marginRight:".5em"}}>
-                                    See full recipe
-                                </button>
+                                <Link to="/find-recipes"> 
+                                    <button
+                                        style={{
+                                            backgroundColor: "#55423D",
+                                            color: "#EADDCF",
+                                            borderRadius: "1em",
+                                            height: "2em",
+                                            width: "7em",
+                                            border: "none",
+                                            position: "absolute",
+                                            bottom: ".6rem",
+                                            right: ".5rem",
+                                        }}
+                                    >
+                                        See full recipe
+                                    </button>
+                                </Link>
                             </ModalFooter>
                         </ModalContent>
                     </Modal>
