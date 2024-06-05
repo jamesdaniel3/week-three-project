@@ -111,6 +111,8 @@ export default function RecipeForm() {
                                 <option value="pinches">Pinches</option>
                                 <option value="pints">Pints</option>
                                 <option value="pounds">Pounds</option>
+                                <option value="tablespoons">Tablespoons</option>
+                                <option value="teaspoons">Teaspoons</option>
                                 <option value="quarts">Quarts</option>
                             </select>
                             <button
