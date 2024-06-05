@@ -22,6 +22,9 @@ const initialFormData = {
     vegetarian: false,
     instructionsType: "write",
     instructionsLink: "",
+    status: "NEW",
+    additionalNotes: "",
+    userCreated: true,
 };
 
 export default function RecipeForm() {
@@ -108,6 +111,8 @@ export default function RecipeForm() {
                                 <option value="pinches">Pinches</option>
                                 <option value="pints">Pints</option>
                                 <option value="pounds">Pounds</option>
+                                <option value="tablespoons">Tablespoons</option>
+                                <option value="teaspoons">Teaspoons</option>
                                 <option value="quarts">Quarts</option>
                             </select>
                             <button
@@ -119,7 +124,7 @@ export default function RecipeForm() {
                             </button>
                         </div>
                     ))}
-                    <button type="button" onClick={() => addIngredient(setFormData)} className="add-button">
+                    <button type="button" onClick={() => addIngredient(setFormData)} className="new-row-button">
                         +
                     </button>
                     <div className="section-header">Instructions</div>
@@ -178,7 +183,7 @@ export default function RecipeForm() {
                         </div>
                     )}
                     {formData.instructionsType === "write" && (
-                        <button type="button" onClick={() => addInstruction(setFormData)} className="add-button">
+                        <button type="button" onClick={() => addInstruction(setFormData)} className="new-row-button">
                             +
                         </button>
                     )}

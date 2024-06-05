@@ -1,5 +1,3 @@
-
-
 import NavBar from "../components/Navbar.jsx";
 import "../styles/Index.css";
 import "../styles/Admin.css"; 

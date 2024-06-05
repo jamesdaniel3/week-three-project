@@ -43,7 +43,7 @@
     color: var(--dbrown1);
 }
 
-.add-button {
+.new-row-button {
     padding: 0.5rem 1rem;
     background-color: var(--dbrown1);
     color: white;
