@@ -22,14 +22,14 @@ function Recipe() {
         name: "Overnight Oats",
         ingredients: [
             {
-                "Amount": 1,
-                "Name": "Oats",
-                "Unit": "Cups"
+                amount: 1,
+                name: "Oats",
+                unit: "Cups"
             },
             {
-                "Amount": 2,
-                "Name": "Peanut Butter",
-                "Unit": "Tablespoons"
+                amount: 2,
+                name: "Peanut Butter",
+                unit: "Tablespoons"
             }
         ]
 

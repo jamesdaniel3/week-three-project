@@ -29,33 +29,38 @@ export default function RecipeDisplay({ recipe }) {
                         <div className={"section-content"}>
                             <ul>
                                 {recipe.ingredients.map((ingredient, index) => {
-                                    let unit = ingredient.Unit;
-                                    if (ingredient.Amount === 1) {
+                                    let unit = ingredient.unit;
+                                    if (ingredient.amount === 1) {
                                         unit = unit.slice(0, unit.length - 1);
                                     }
                                     return (
                                         <li key={index}>
-                                            {ingredient.Amount} {unit} of {ingredient.Name}
+                                            {ingredient.amount} {unit} of {ingredient.name}
                                         </li>
                                     );
                                 })}
                             </ul>
                         </div>
                     </div>
-                    <div className="section">
-                        <p className={"section-header"}>Instructions</p>
-                        <div className={"section-content"}>
-                            <ol>
-                                {recipe.instructions.map((instruction, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {instruction}
-                                        </li>
-                                    );
-                                })}
-                            </ol>
+                    {recipe.instructions !== [] &&
+                        <div className="section">
+                            <p className={"section-header"}>Instructions</p>
+                            <div className={"section-content"}>
+                                <ol>
+                                    {recipe.instructions.map((instruction, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {instruction}
+                                            </li>
+                                        );
+                                    })}
+                                </ol>
+                                {recipe.instructionsLink &&
+                                    <p style={{"margin-left": "-20px"}}>Outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
                     {recipe.additionalNotes &&
                         <div className="section">
                             <p className={"section-header"}>Additional Notes</p>
