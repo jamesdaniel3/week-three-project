@@ -22,6 +22,9 @@ const initialFormData = {
     vegetarian: false,
     instructionsType: "write",
     instructionsLink: "",
+    status: "NEW",
+    additionalNotes: "",
+    userCreated: true,
 };
 
 export default function RecipeForm() {

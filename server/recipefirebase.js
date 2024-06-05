@@ -29,8 +29,9 @@ router.get('/recipes', async (req, res) => {
  */
 router.post("/create-recipe", async (req, res) => {
     try {
-        const recipe = req.body.recipe; // Object of the doc
-        const response = await db.collection("recipes").add(recipe);
+        const recipe = req.body; // Object of the doc
+        delete recipe.instructionsType
+        const docRef = await db.collection("recipes").add(recipe);
         res.status(200).json({ id: docRef.id, message: `Successfully created recipe with id ${docRef.id}` });
     } catch (err) {
         console.error('Error creating recipe:', err);
