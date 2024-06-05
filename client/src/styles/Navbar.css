@@ -41,14 +41,19 @@ button.hide-button img.hidden {
     background-color: var(--lbrown1);
     height: auto;
     min-height: 100vh;
-    min-width: 305px;
-    max-width: 305px;
+    min-width: 70px; 
+    max-width: 70px; 
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: 0.5s;
+    transition: max-width 0.3s ease; 
     max-height: 100vh;
     position: fixed;
+    z-index: 0; 
+}
+
+.main:hover {
+    max-width: 200px; 
 }
 
 .navbar-header {
@@ -57,14 +62,26 @@ button.hide-button img.hidden {
     background-color: var(--lbrown2);
     display: flex;
     align-items: center;
+    padding: 0 10px; 
+    box-sizing: border-box; 
+}
+
+.navbar-header .logo {
+    width: 50px; 
+    height: 50px; 
+    margin-right: 10px; 
 }
 
 .navbar-header .title {
     color: var(--dbrown1);
     font-family: "Lora", serif;
     font-weight: 500;
-    margin-left: 15px;
     font-size: 28px;
+    display: none;
+}
+
+.main:hover .navbar-header .title {
+    display: inline; 
 }
 
 .navbar-link {
@@ -76,10 +93,17 @@ button.hide-button img.hidden {
     align-items: center;
     text-decoration: none !important;
     color: var(--dbrown1);
+    padding: 0 10px; 
+    box-sizing: border-box; 
 }
 
 .navbar-link span {
     margin-left: 15px;
+    display: none; 
+}
+
+.main:hover .navbar-link span {
+    display: inline; 
 }
 
 .navbar-link:hover {
