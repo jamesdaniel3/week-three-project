@@ -1,6 +1,7 @@
 import NavBar from "../components/Navbar.jsx";
 import RecipeForm from "../components/RecipeForm.jsx";
 import "../styles/Index.css"
+
 function CreateRecipe() {
 
     return (
