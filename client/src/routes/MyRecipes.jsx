@@ -1,42 +1,118 @@
-import React from "react";
+// import React from "react";
+// import "../styles/ColorPalette.css";
+// import "../styles/MyRecipes.css";
+// import NavBar from "../components/Navbar.jsx";
+// import "../styles/Index.css";
+// import {
+//   Modal,
+//   ModalOverlay,
+//   ModalContent,
+//   ModalHeader,
+//   ModalFooter,
+//   ModalBody,
+//   ModalCloseButton,
+//   useDisclosure,
+//   Button,
+//   Card,
+//   CardHeader,
+//   CardBody,
+//   CardFooter,
+//   Text,
+//   Image,
+//   Stack,
+//   ButtonGroup,
+//   Heading,
+//   Divider,
+//   Center,
+// } from "@chakra-ui/react";
+// import img from "../assets/zdz9mr_blackBear.png";
+import React, { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { collection, doc, getDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
 import "../styles/ColorPalette.css";
 import "../styles/MyRecipes.css";
 import NavBar from "../components/Navbar.jsx";
 import "../styles/Index.css";
 
-const RecipeItem = ({ title, description }) => (
-  <div className="recipe-item">
-    <h2 className="recipe-title">{title}</h2>
-    <p className="recipe-description">{description}</p>
-  </div>
-);
-
 const MyRecipes = () => {
+  const [recipes, setRecipes] = useState([]);
+  const [view, setView] = useState("favorites"); // 'favorites' or 'created'
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    if (user) {
+      fetchRecipes();
+    }
+  }, [user, view]);
+
+  const fetchRecipes = async () => {
+    if (user) {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      const userData = userDoc.data();
+
+      if (view === "favorites") {
+        const favoriteRecipes = await Promise.all(
+          userData.favoritedRecipes.map(async (recipeId) => {
+            const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
+            return { id: recipeDoc.id, ...recipeDoc.data() };
+          })
+        );
+        setRecipes(favoriteRecipes);
+      } else if (view === "created") {
+        const createdRecipes = await Promise.all(
+          userData.createdRecipes.map(async (recipeId) => {
+            const recipeDoc = await getDoc(doc(db, "recipes", recipeId));
+            return { id: recipeDoc.id, ...recipeDoc.data() };
+          })
+        );
+        setRecipes(createdRecipes);
+      }
+    }
+  };
+
+  const handleButtonClick = (type) => {
+    setView(type);
+  };
+
   return (
     <>
       <NavBar />
-      <button></button>
-      <div className="recipes-body">
-        <div className="recipes-main">
-          <div className="recipes-header">
-            <h1>My Recipes</h1>
+      <div className="app">
+        <header className="app-header">
+          <h1>Cheffed</h1>
+          <h2>Recipe library</h2>
+          <div className="header-buttons">
+            <button
+              className="header-button"
+              onClick={() => handleButtonClick("favorites")}
+            >
+              Favorites
+            </button>
+            <button
+              className="header-button"
+              onClick={() => handleButtonClick("created")}
+            >
+              Created Recipes
+            </button>
           </div>
-          <div className="recipe-list">
-            <RecipeItem
-              title="Chocolate Cake"
-              description="A delicious chocolate cake with rich chocolate frosting."
-            />
-            <RecipeItem
-              title="Caesar Salad"
-              description="A classic Caesar salad with homemade croutons and dressing."
-            />
-            {/* Add more RecipeItem components as needed */}
-          </div>
-          <button className="add-recipe-button">Add Recipe</button>
-          <div className="error-message" style={{ display: "none" }}>
-            Error message goes here
-          </div>
-        </div>
+        </header>
+        <main className="app-content">
+          {recipes.length > 0 ? (
+            recipes.map((recipe) => (
+              <div key={recipe.id} className="recipe-card">
+                <h3>{recipe.title}</h3>
+                <p>{recipe.description}</p>
+                {/* Add more recipe details as needed */}
+              </div>
+            ))
+          ) : (
+            <p>No recipes found.</p>
+          )}
+        </main>
       </div>
     </>
   );
