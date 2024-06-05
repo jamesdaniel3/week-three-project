@@ -23,17 +23,18 @@ function Recipe() {
 
                     // Transform the info object into the desired recipe format
                     const transformedRecipe = {
-                        calories: info.calories / info.yield,
+                        calories: Math.round(info.calories / info.yield),
                         glutenFree: info.healthLabels.includes("Gluten-Free"),
                         vegetarian: info.healthLabels.includes("Vegetarian"),
                         name: info.label,
                         servings: info.yield,
                         instructionsLink: info.url,
-                        instructions: [], // Assuming instructions are not provided in the API response
+                        instructions: [],
                         ingredients: info.ingredients.map(item => ({
                             name: item.food,
                             amount: item.quantity,
-                            unit: item.measure
+                            unit: item.measure,
+                            text: item.text,
                         })),
                         additionalNotes: "",
                         status: "OLD",

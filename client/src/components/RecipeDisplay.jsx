@@ -33,11 +33,20 @@ export default function RecipeDisplay({ recipe }) {
                                     if (ingredient.amount === 1) {
                                         unit = unit.slice(0, unit.length - 1);
                                     }
-                                    return (
-                                        <li key={index}>
-                                            {ingredient.amount} {unit} of {ingredient.name}
-                                        </li>
-                                    );
+                                    if(ingredient.text){
+                                        return (
+                                            <li key={index}>
+                                                {ingredient.text}
+                                            </li>
+                                        );
+                                    }
+                                    else{
+                                        return (
+                                            <li key={index}>
+                                                {ingredient.amount} {unit} of {ingredient.name}
+                                            </li>
+                                        );
+                                    }
                                 })}
                             </ul>
                         </div>
