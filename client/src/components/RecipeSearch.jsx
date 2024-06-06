@@ -36,22 +36,22 @@ const RecipeSearch = () => {
 
   const [diet, setDiet] = useState("");
   const [health, setHealth] = useState("");
-  const [cusineType, setCusineType] = useState("");
+  const [cuisineType, setcuisineType] = useState("");
   const [mealType, setMealType] = useState("");
   const [dishType, setDishType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const query = e.target.elements.query.value;
+    const q = e.target.elements.query.value;
 
     setLoading(true);
     try {
       if (source === "edamam") {
         const params = {
-          q: query,
+          ...(q && { q }),
           ...(diet && { diet }),
           ...(health && { health }),
-          ...(cusineType && { cusineType }),
+          ...(cuisineType && { cuisineType }),
           ...(mealType && { mealType }),
           ...(dishType && { dishType }),
         };
@@ -129,11 +129,11 @@ const RecipeSearch = () => {
         </div>
         
         <div className="option-container">
-          <p>Cusine Type</p>
+          <p>cuisine Type</p>
            <select 
-          value={cusineType}
-          name="cusineType"
-          onChange={(e) => setCusineType(e.target.value)}
+          value={cuisineType}
+          name="cuisineType"
+          onChange={(e) => setcuisineType(e.target.value)}
           className="select"
         >
           {cuisineOptions.map((option) => (
