@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.5",
     "axios": "^1.7.2",
     "chakra": "^0.0.3",
+    "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "framer-motion": "^11.2.10",
     "react": "^18.2.0",

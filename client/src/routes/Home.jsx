@@ -26,44 +26,57 @@ import {
     Box,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import img from "../assets/zdz9mr_blackBear.png";
 
 function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const arr = ["name", "name", "name", "name", "name"];
     const [randomRecipes, setRandomRecipes] = useState([]);
-
-    const isWithinTimeRange = (startHour, endHour) => {
-        return currentHour >= startHour && currentHour < endHour;
-    };
+    const [meal, setMealType] = useState("breakfast");
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     useEffect(() => {
-        // const now = new Date();
-        // const currentHour = now.getHours();
-        // const isMorning = isWithinTimeRange(0, 11);
-        // const isAfternoon = isWithinTimeRange(11, 15);
-        // const isEvening = isWithinTimeRange(15, 24);
-
         const fetchData = async () => {
+            const now = new Date();
+            const currentHour = now.getHours();
 
-            // if(isMorning) {
+            const isWithinTimeRange = (startHour, endHour) => {
+                return currentHour >= startHour && currentHour < endHour;
+            };
 
-            // }
-            // if (isAfternoon) {
-            // }
-            // if (isEvening) {
-            // }
-            // else {
-            const response = await axios.get(
-                "http://localhost:8888/edamam/recipesearch",
-                { params: { diet: "balanced" } }
+            const isMorning = isWithinTimeRange(5, 10);
+            const isAfternoon = isWithinTimeRange(10, 13);
+            const isEvening = isWithinTimeRange(13, 21);
 
-            );
-            setRandomRecipes(response.data.hits);
-            console.log(response.data.hits);
+            if (isMorning) {
+                setMealType("breakfast");
+            } else if (isAfternoon) {
+                setMealType("brunch");
+            } else if (isEvening) {
+                setMealType("lunch/dinner");
+            } else {
+                setMealType("snack");
+            }
+
+            try {
+                const response = await axios.get(
+                    "http://localhost:8888/edamam/recipesearch",
+                    {
+                        params: { mealType: meal },
+                    }
+                );
+                setRandomRecipes(response.data.hits);
+                console.log(response.data.hits);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
+
         fetchData();
     }, []);
+
+    const handleOpenModal = (recipe) => {
+        setSelectedRecipe(recipe);
+        onOpen();
+    };
 
     return (
         <>
@@ -72,6 +85,8 @@ function Home() {
                 <div className="content">
                     <h1>Cheffed</h1>
                     <h3>Your digital cookbook</h3>
+                    <br />
+                    <h6>Here are our suggestions for {meal}</h6>
                     <div
                         style={{
                             display: "flex",
@@ -89,112 +104,139 @@ function Home() {
                                     height="12em"
                                     borderRadius="15"
                                     marginTop="30px"
-                                    marginRight="5px"
+                                    marginRight="1em"
                                     onClick={onOpen}
                                 >
                                     <CardBody>
                                         <Image
                                             src={item.recipe.images.SMALL.url}
                                             width="100%"
-                                            height="8em" // Set a fixed height for the image
-                                            objectFit="cover" // Maintain aspect ratio while filling the specified height
+                                            height="8em"
+                                            objectFit="cover"
                                             borderTopRadius="15"
-                                            onClick={onOpen}
+                                            onClick={() =>
+                                                handleOpenModal(item.recipe)
+                                            }
                                         />
                                         <Box padding="0.5em">
                                             <Text textAlign="center">
-                                                {item.recipe.label.length > 55
+                                                {item.recipe.label.length > 50
                                                     ? `${item.recipe.label.slice(
                                                           0,
-                                                          55
+                                                          50
                                                       )}...`
                                                     : item.recipe.label}
                                             </Text>
                                         </Box>
                                     </CardBody>
                                 </Card>
+                                {selectedRecipe && (
+                                    <Modal
+                                        isOpen={isOpen}
+                                        onClose={onClose}
+                                        borderRadius="20px"
+                                    >
+                                        <ModalOverlay
+                                            style={{
+                                                backgroundColor:
+                                                    "rgba(0, 0, 0, 0.02)",
+                                            }}
+                                        />
+                                        <ModalContent
+                                            marginTop="20%"
+                                            marginLeft="36%"
+                                            width="400px"
+                                            height="300px"
+                                            bg="#EADDCF"
+                                            borderRadius="20px"
+                                        >
+                                            <ModalHeader
+                                                textAlign="center"
+                                                color="55423D"
+                                                marginTop=".3em"
+                                                fontSize="1.5em"
+                                            >
+                                                {selectedRecipe.label}
+                                            </ModalHeader>
+                                            <ModalBody marginLeft="1em">
+                                                <div
+                                                    style={{
+                                                        position: "absolute",
+                                                        top: "5rem",
+                                                        left: ".5rem",
+                                                        paddingLeft: ".1rem",
+                                                        paddingRight: ".1rem",
+                                                    }}
+                                                >
+                                                    Ingredients:{"   "}
+                                                    {item.recipe.ingredientLines.join(
+                                                        ",  "
+                                                    )}
+                                                </div>
+                                                <br />
+                                                <div
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: "2.5rem",
+                                                        left: ".5rem",
+                                                    }}
+                                                >
+                                                    Servings:{" "}
+                                                    {item.recipe.yield}
+                                                </div>
+                                                <br />
+                                                <div
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: ".9rem",
+                                                        left: ".5rem",
+                                                    }}
+                                                >
+                                                    Calories/serving:{" "}
+                                                    {(
+                                                        item.recipe.calories /
+                                                        item.recipe.yield
+                                                    ).toFixed(2)}
+                                                </div>
+                                            </ModalBody>
+                                            <ModalFooter>
+                                                <Link
+                                                    to={`/recipe/${
+                                                        selectedRecipe.uri.split(
+                                                            "#recipe_"
+                                                        )[1]
+                                                    }/edamam`}
+                                                >
+                                                    <button
+                                                        style={{
+                                                            backgroundColor:
+                                                                "#55423D",
+                                                            color: "#EADDCF",
+                                                            borderRadius: "1em",
+                                                            height: "2em",
+                                                            width: "9em",
+                                                            border: "none",
+                                                            position:
+                                                                "absolute",
+                                                            bottom: ".6rem",
+                                                            right: ".5rem",
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                "center",
+                                                            alignItems:
+                                                                "center",
+                                                        }}
+                                                    >
+                                                        See full recipe
+                                                    </button>
+                                                </Link>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </Modal>
+                                )}
                             </div>
                         ))}
-                         <Modal
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        borderRadius="20px"
-                    >
-                        <ModalOverlay
-                            style={{
-                                backgroundColor: "rgba(0, 0, 0, 0.2)",
-                                backdropFilter: "blur(2px)",
-                            }}
-                        />
-                        <ModalContent
-                            marginTop="20%"
-                            marginLeft="36%"
-                            width="400px"
-                            height="200px"
-                            bg="#EADDCF"
-                            borderRadius="20px"
-                        >
-                            <ModalHeader
-                                textAlign="center"
-                                color="55423D"
-                                fontSize="2em"
-                            >
-                                Recipe name
-                            </ModalHeader>
-                            <ModalBody marginLeft="1em">
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        top: "2.5rem",
-                                        left: ".5rem",
-                                    }}
-                                >
-                                    Ingredients:{" "}
-                                </div>
-                                <br />
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        bottom: "2.5rem",
-                                        left: ".5rem",
-                                    }}
-                                >
-                                    Servings:
-                                </div>
-                                <br />
-                                <div
-                                    style={{
-                                        position: "absolute", // Add this line
-                                        bottom: ".9rem", // Add this line
-                                        left: ".5rem", // Add this line
-                                    }}
-                                >
-                                    Calories/serving:
-                                </div>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Link to="/find-recipes">
-                                    <button
-                                        style={{
-                                            backgroundColor: "#55423D",
-                                            color: "#EADDCF",
-                                            borderRadius: "1em",
-                                            height: "2em",
-                                            width: "7em",
-                                            border: "none",
-                                            position: "absolute",
-                                            bottom: ".6rem",
-                                            right: ".5rem",
-                                        }}
-                                    >
-                                        See full recipe
-                                    </button>
-                                </Link>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
                     </div>
-                   
                 </div>
             </div>
         </>

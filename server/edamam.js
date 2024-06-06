@@ -45,4 +45,22 @@ router.get('/by-uri', async (req, res) => {
     }
 });
 
+
+/**
+ * @query : example { params: {id: ""}}
+ */
+router.get('/by-id', async (req, res) => {
+    try {
+        const id = req.query.id;
+        const url = `https://api.edamam.com/api/recipes/v2/${id}?type=public&app_id=${appid}&app_key=${appkey}`;
+
+        const response = await axios.get(url);
+
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: 'An error occurred while fetching data' });
+    }
+});
+
 export default router;
