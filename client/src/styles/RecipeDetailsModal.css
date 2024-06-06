@@ -1,0 +1,80 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #EADDCF; 
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: #55423D; 
+    font-family: 'Arial', sans-serif; 
+}
+
+.modal-content h2 {
+    color: #55423D; 
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    margin: 10px 0;
+}
+
+.modal-content ul, .modal-content ol {
+    padding-left: 20px;
+}
+
+.modal-content a {
+    color: #55423D; 
+    text-decoration: none;
+}
+
+.modal-content a:hover {
+    text-decoration: underline;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.approve, .reject {
+    width: 150px; 
+    height: 50px; 
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px; 
+    font-weight: bold; 
+}
+
+.approve {
+    background-color: green;
+    color: white;
+}
+
+.reject {
+    background-color: red;
+    color: white;
+}
+
+
+
+
