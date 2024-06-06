@@ -93,21 +93,27 @@ router.get("/recipe", async (req, res) => {
 
 
 router.put("/add-favorite", async (req, res) => {
-    const { userid, recipeid } = req.query;
-    console.log(userid, recipeid);
+    const { user_id, recipe_id, recipe } = req.body;
+
     try {
-        const docSnap = await db.collection("users").doc(userid).get();
-        if (docSnap.exists) {
-            await db.collection("users").doc(userid).update({
-                favoriteRecipes: [...docSnap.data().favoriteRecipes, recipeid],
+        const recipeDoc = await db.collection("recipes").doc(recipe_id).get();
+
+        if (recipeDoc.exists) {
+            // Recipe exists, add to user's favoritedRecipes
+            await db.collection("users").doc(user_id).update({
+                favoritedRecipes: admin.firestore.FieldValue.arrayUnion(recipe_id)
             });
-            res.status(200).json({ message: `Successfully added recipe with id ${recipeid} to favorites` });
         } else {
-            await db.collection("users").doc(userid).set({
-                favoriteRecipes: [recipeid],
+            // Recipe does not exist, create it
+            await db.collection("recipes").doc(recipe_id).set(recipe);
+
+            // Add to user's favoritedRecipes
+            await db.collection("users").doc(user_id).update({
+                favoritedRecipes: admin.firestore.FieldValue.arrayUnion(recipe_id)
             });
-            res.status(200).json({ message: `Successfully added recipe with id ${recipeid} to favorites` });
         }
+
+        res.status(200).json({ message: `Successfully added recipe with id ${recipe_id} to user's favorites` });
     } catch (err) {
         console.error('Error adding recipe to favorites:', err);
         res.status(400).json({ error: err.message });
