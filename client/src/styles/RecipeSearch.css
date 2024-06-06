@@ -43,19 +43,25 @@
   border-radius: 10px;
   margin-right: 1rem;
   height: 3em;
+  outline: none;
 }
 
+.text-input:focus {
+  border-color: var(--dbrown1);
+  box-shadow: 0 0 5px var(--dbrown1);
+}
 .submit-button2 {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 10px;
-  background-color: #4caf50;
-  color: white;
+  color: var(--dbrown1);
   cursor: pointer;
+  border: 1px solid var(--dbrown1);
+  background-color: var(--white1);
 }
 
 .submit-button2:hover {
-  background-color: #45a049;
+  background-color: var(--lbrown2);
 }
 
 .results-container {
