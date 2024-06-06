@@ -163,6 +163,55 @@ router.put("/add-favorite", async (req, res) => {
     }
 });
 
+router.put("/remove-favorite", async (req, res) => {
+    const { user_id, recipe_id } = req.body;
+
+    try {
+        const userDoc = await db.collection("users").doc(user_id).get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ error: `User with id ${user_id} does not exist` });
+        }
+
+        const userData = userDoc.data();
+        const favoritedRecipes = userData.favoritedRecipes || [];
+
+        if (favoritedRecipes.includes(recipe_id)) {
+            await db.collection("users").doc(user_id).update({
+                favoritedRecipes: admin.firestore.FieldValue.arrayRemove(recipe_id)
+            });
+            res.status(200).json({ message: `Successfully removed recipe with id ${recipe_id} from user's favorites` });
+        } else {
+            res.status(400).json({ error: `Recipe with id ${recipe_id} is not in user's favorites` });
+        }
+    } catch (err) {
+        console.error('Error removing recipe from favorites:', err);
+        res.status(500).json({ error: 'An error occurred while removing recipe from favorites' });
+    }
+});
+
+router.get("/is-favorited", async (req, res) => {
+    const { user_id, recipe_id } = req.query;
+
+    try {
+        const userDoc = await db.collection("users").doc(user_id).get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ error: `User with id ${user_id} does not exist` });
+        }
+
+        const userData = userDoc.data();
+        const favoritedRecipes = userData.favoritedRecipes || [];
+
+        const isFavorited = favoritedRecipes.includes(recipe_id);
+        res.status(200).json({ isFavorited });
+    } catch (err) {
+        console.error('Error checking if recipe is favorited:', err);
+        res.status(500).json({ error: 'An error occurred while checking if recipe is favorited' });
+    }
+});
+
+
 
 router.put("/add-created", async (req, res) => {
     const { userid, recipeid } = req.query;
