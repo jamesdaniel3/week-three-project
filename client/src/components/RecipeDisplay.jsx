@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { ChatBot } from "./ChatBot.jsx";
 import { getAuth } from "firebase/auth";
 import { checkIfFavorited, addFavorite, removeFavorite } from "../utils/RecipeDisplayFunctions";
+import liked from '../assets/liked.png';
+import unliked from '../assets/unliked.png'
 
 export default function RecipeDisplay({ recipe, recipe_id }) {
     const [showChatBot, setShowChatBot] = useState(false);
@@ -56,7 +58,12 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
     return (
         <div className="recipe-page-viewing">
             <div className="text-content">
-                <div className="recipe-title">{recipe.name}</div>
+                <div className="recipe-title">{recipe.name} {isFavorited ? (
+                        <img src={liked}  onClick={unfavoriteButton} alt={"unfavorite button"} className={"favorite-image"}/>
+                    ) : (
+                        <img src={unliked}  onClick={favoriteButton} alt={"favorite button"} className={"favorite-image"}/>
+                    )}
+                </div>
                 <div className="form-container">
                     <div className="section">
                         <p className={"section-header"}>Quick Facts</p>
@@ -107,7 +114,17 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                                     })}
                                 </ol>
                                 {recipe.instructionsLink &&
-                                    <p style={{ "margin-left": "-20px" }}>Outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
+                                    <p style={{"marginLeft": "-20px", "marginTop": "10px"}}>Additional outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
+                                }
+                            </div>
+                        </div>
+                    }
+                    {recipe.instructions.length === 0 &&
+                        <div className="section">
+                            <p className={"section-header"}>Instructions</p>
+                            <div className={"section-content"}>
+                                {recipe.instructionsLink &&
+                                    <p style={{"marginLeft": "-20px"}}>Outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
                                 }
                             </div>
                         </div>
@@ -120,11 +137,6 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                             </div>
                         </div>
                     }
-                    {isFavorited ? (
-                        <button onClick={unfavoriteButton}>Unfavorite This Recipe</button>
-                    ) : (
-                        <button onClick={favoriteButton}>Favorite This Recipe</button>
-                    )}
                 </div>
             </div>
             <div className="chatBot">

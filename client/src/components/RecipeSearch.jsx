@@ -56,7 +56,7 @@ const RecipeSearch = () => {
       <div className="search-bar">
         <form id="input-form" onSubmit={handleSubmit}>
           <input type="text" name="query" className="text-input" placeholder="Search for a recipe..." />
-          <button type="submit">Search</button>
+          <button className={"search-button"} type="submit">Search</button>
         </form>
       </div>
       {loading && <p>Loading...</p>}

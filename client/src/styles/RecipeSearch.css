@@ -34,7 +34,7 @@
     height: 3em;
   }
 
-button {
+.search-button {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 10px;
@@ -43,7 +43,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.search-button:hover {
   background-color: #45a049;
 }
 
