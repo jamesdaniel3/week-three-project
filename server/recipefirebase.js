@@ -57,20 +57,63 @@ router.delete("/delete-recipe", async (req, res) => {
     }
 });
 
+router.get("/user-favorited-recipes", async (req, res) => {
+    const { user_id } = req.query;
 
-router.get("/user-favorites", async (req, res) => {
-    const { id } = req.query;
     try {
-        const docSnap = await db.collection("users").doc(id).get();
-        if (docSnap.exists) {
-            res.status(200).json(docSnap.data());
-        } else {
-            console.log(`Document with id '${id}' does not exist`);
-            res.status(404).json({ error: `Document with id ${id} does not exist` });
+        const userDoc = await db.collection("users").doc(user_id).get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ error: `User with id ${user_id} does not exist` });
         }
+
+        const userData = userDoc.data();
+        const favoritedRecipes = userData.favoritedRecipes || [];
+
+        const recipes = await Promise.all(
+            favoritedRecipes.map(async (recipeId) => {
+                const recipeDoc = await db.collection("recipes").doc(recipeId).get();
+                if (recipeDoc.exists) {
+                    return { id: recipeDoc.id, ...recipeDoc.data() };
+                }
+                return null;
+            })
+        );
+
+        res.status(200).json(recipes.filter(recipe => recipe !== null));
     } catch (err) {
-        console.error('Error fetching user favorites:', err);
-        res.status(500).json({ error: 'An error occurred while fetching data' });
+        console.error('Error fetching favorited recipes:', err);
+        res.status(500).json({ error: 'An error occurred while fetching favorited recipes' });
+    }
+});
+
+router.get("/user-created-recipes", async (req, res) => {
+    const { user_id } = req.query;
+
+    try {
+        const userDoc = await db.collection("users").doc(user_id).get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ error: `User with id ${user_id} does not exist` });
+        }
+
+        const userData = userDoc.data();
+        const createdRecipes = userData.createdRecipes || [];
+
+        const recipes = await Promise.all(
+            createdRecipes.map(async (recipeId) => {
+                const recipeDoc = await db.collection("recipes").doc(recipeId).get();
+                if (recipeDoc.exists) {
+                    return { id: recipeDoc.id, ...recipeDoc.data() };
+                }
+                return null;
+            })
+        );
+
+        res.status(200).json(recipes.filter(recipe => recipe !== null));
+    } catch (err) {
+        console.error('Error fetching favorited recipes:', err);
+        res.status(500).json({ error: 'An error occurred while fetching favorited recipes' });
     }
 });
 
