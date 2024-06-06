@@ -52,7 +52,7 @@ const Login = () => {
                     navigate('/home');
                 }
             })
-            .then((user) => {
+            .then(() => {
                 return axios.post('http://localhost:8888/login/findOrCreateUser', { email: email });
             })
             .catch((e) => {
