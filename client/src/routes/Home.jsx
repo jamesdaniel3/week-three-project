@@ -169,7 +169,7 @@ function Home() {
                                                     }}
                                                 >
                                                     Ingredients:{"   "}
-                                                    {item.recipe.ingredientLines.join(
+                                                    {selectedRecipe.ingredientLines.join(
                                                         ",  "
                                                     )}
                                                 </div>
@@ -182,7 +182,7 @@ function Home() {
                                                     }}
                                                 >
                                                     Servings:{" "}
-                                                    {item.recipe.yield}
+                                                    {selectedRecipe.yield}
                                                 </div>
                                                 <br />
                                                 <div
@@ -194,8 +194,8 @@ function Home() {
                                                 >
                                                     Calories/serving:{" "}
                                                     {(
-                                                        item.recipe.calories /
-                                                        item.recipe.yield
+                                                        selectedRecipe.calories /
+                                                        selectedRecipe.yield
                                                     ).toFixed(2)}
                                                 </div>
                                             </ModalBody>
