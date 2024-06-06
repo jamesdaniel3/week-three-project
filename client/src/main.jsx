@@ -10,6 +10,7 @@ import FindRecipes from "./routes/FindRecipes.jsx";
 import Recipe from "./routes/Recipe.jsx";
 import MyRecipes from "./routes/MyRecipes.jsx";
 import CreateRecipe from "./routes/CreateRecipe.jsx"
+import Signup from "./routes/Signup.jsx";
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Route path="/recipe/:id/:location" element={<Recipe />} />
                 <Route path="/my-recipes" element={<MyRecipes />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/Signup" element={<Signup />} />
             </Routes>
         </>
     );

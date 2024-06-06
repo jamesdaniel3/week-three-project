@@ -1,5 +1,4 @@
 import NavBar from "../components/Navbar.jsx";
-import "../styles/Index.css"
 import "../styles/RecipeSearch.css"
 import { useEffect, useState } from "react"
 import RecipeSearch from "../components/RecipeSearch.jsx"

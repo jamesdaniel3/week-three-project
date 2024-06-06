@@ -67,12 +67,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 18px;
+    margin: 18px;
     width: 100%;
 }
 
 .login-button {
-    margin-top: 38px;
     width: 110px;
     height: 40px;
     border-radius: 50px;
