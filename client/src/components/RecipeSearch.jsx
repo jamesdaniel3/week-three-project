@@ -129,7 +129,7 @@ const RecipeSearch = () => {
         </div>
         
         <div className="option-container">
-          <p>cuisine Type</p>
+          <p>Cuisine Type</p>
            <select 
           value={cuisineType}
           name="cuisineType"
