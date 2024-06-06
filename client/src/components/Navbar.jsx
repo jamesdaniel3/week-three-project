@@ -4,7 +4,8 @@ import { signOut } from "firebase/auth";
 import '../styles/Navbar.css';
 import '../styles/Index.css'
 import { auth } from "../firebase.js";
-import chefHatLogo from '../assets/chefs-hat.png'; 
+import chefHatLogo from '../assets/chefs-hat.png';
+import edge from '../assets/edge.png'
 
 export default function NavBar() {
     const [hidden, setHidden] = useState('');
@@ -35,7 +36,7 @@ export default function NavBar() {
     return (
         <>
             <button className="hide-button">
-                <img src="src/assets/edge.png" className={"hide-button " + hidden} onClick={hideNav} />
+                <img src={edge} className={"hide-button " + hidden} onClick={hideNav} />
             </button>
             <div className={"main " + hidden}>
                 <div className="navbar-header">
