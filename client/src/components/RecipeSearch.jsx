@@ -66,10 +66,11 @@ const RecipeSearch = () => {
       } else if (source === "userCreated") {
         const response = await axios.get("http://localhost:8888/recipefirebase/recipes");
         const filteredData = response.data.filter((recipe) =>
-          recipe.userCreated && recipe.name.toLowerCase().includes(query.toLowerCase() )
+          recipe.userCreated && recipe.name.toLowerCase().includes(q.toLowerCase() )
         );
         setSearchResults(filteredData);
         setCurrentSource(source);
+       
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -80,7 +81,6 @@ const RecipeSearch = () => {
 
   const handleSourceChange = (e) => {
     setSource(e.target.value);
-    console.log(e.target.value)
   };
 
   return (
