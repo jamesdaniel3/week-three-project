@@ -9,7 +9,6 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton,
     useDisclosure,
     Button,
     Card,
@@ -20,16 +19,14 @@ import {
     Image,
     Stack,
     Flex,
-    ButtonGroup,
-    Heading,
-    Divider,
     Center,
     Box,
     Select,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import "../styles/Index.css";
-import { getAuth } from "firebase/auth"; 
+import { getAuth } from "firebase/auth";
+import genericFoodImage from "../assets/genericFood.png";
 
 function MyRecipes() {
     const auth = getAuth();
@@ -42,28 +39,58 @@ function MyRecipes() {
     const [savedEdamamRecipes, setSavedEdamamRecipes] = useState([]);
     const [savedOtherAuthorRecipes, setSavedOtherAuthorRecipes] = useState([]);
     const [allSavedRecipes, setAllSavedRecipes] = useState([]);
-    const [displayRecipes, setDisplayRecipes] = useState([]);
 
     const [selectedValue, setSelectedValue] = useState("");
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchFavoritedRecipes = async () => {
             try {
-                const response = await axios.get(
-                    `http://localhost:8000/recipefirebase/user-created-recipes${user_id}`
+                const responseFavorites = await axios.get(
+                    "http://localhost:8888/recipefirebase/user-favorited-recipes",
+                    {
+                        params: { user_id },
+                    }
                 );
-                console.log(resposne);
+                const responseCreated = await axios.get(
+                    "http://localhost:8888/recipefirebase/user-created-recipes",
+                    {
+                        params: { user_id },
+                    }
+                );
+                setAllSavedRecipes(responseFavorites.data);
+                setUserRecipes(responseCreated.data);
+                //setAllSavedRecipes(allSavedRecipes.concat(userRecipes));
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("Error fetching favorited recipes:", error);
             }
         };
 
-        fetchData();
-    }, []);
+        fetchFavoritedRecipes();
+        findEdamamRecipes();
+        findOtherAuthorRecipes();
+    }, [user_id]);
+
+    const [displayRecipes, setDisplayRecipes] = useState(allSavedRecipes); // needs to be here instead of with other use states bc must wait to fetch recipes before setting displayRecipes
 
     const handleOpenModal = (recipe) => {
         setSelectedRecipe(recipe);
         onOpen();
+    };
+
+    const findEdamamRecipes = () => {
+        const filteredList = allSavedRecipes.filter(
+            (item) => !item.userCreated
+        );
+        setSavedEdamamRecipes(filteredList);
+    };
+
+    const findOtherAuthorRecipes = () => {
+        const filteredList = allSavedRecipes.filter(
+            (item1) =>
+                item1.userCreated &&
+                userRecipes.every((item2) => item2.docID !== item1.docID)
+        );
+        setSavedOtherAuthorRecipes(filteredList);
     };
 
     const handleChange = (event) => {
@@ -85,10 +112,7 @@ function MyRecipes() {
                     <h1>Cheffed</h1>
                     <h6>Your recipe library</h6>
                     <br />
-                    <Flex
-                        alignContent={"center"}
-                        justifyContent={"center"}
-                    >
+                    <Flex alignContent={"center"} justifyContent={"center"}>
                         <Center>
                             <Select
                                 bg="#EADDCF"
@@ -104,7 +128,7 @@ function MyRecipes() {
                                 value={selectedValue}
                                 onChange={handleChange}
                             >
-                                <option selected hidden disabled value="">
+                                <option selected hidden disabled value = "">
                                     Filter recipes
                                 </option>
                                 <option value="userCreated">
@@ -133,7 +157,7 @@ function MyRecipes() {
                         }}
                     >
                         {displayRecipes.map((item) => (
-                            <div key={item.recipe.uri}>
+                            <div key={item.name}>
                                 <Card
                                     bg="#EADDCF"
                                     width="14em"
@@ -145,23 +169,23 @@ function MyRecipes() {
                                 >
                                     <CardBody>
                                         <Image
-                                            src={item.recipe.images.SMALL.url}
+                                            src={genericFoodImage}
                                             width="100%"
                                             height="8em"
                                             objectFit="cover"
                                             borderTopRadius="15"
                                             onClick={() =>
-                                                handleOpenModal(item.recipe)
+                                                handleOpenModal(item)
                                             }
                                         />
                                         <Box padding="0.5em">
                                             <Text textAlign="center">
-                                                {item.recipe.label.length > 50
-                                                    ? `${item.recipe.label.slice(
+                                                {item.name.length > 50
+                                                    ? `${item.name.length.slice(
                                                           0,
                                                           50
                                                       )}...`
-                                                    : item.recipe.label}
+                                                    : item.name}
                                             </Text>
                                         </Box>
                                     </CardBody>
@@ -192,7 +216,7 @@ function MyRecipes() {
                                                 marginTop=".3em"
                                                 fontSize="1.5em"
                                             >
-                                                {selectedRecipe.label}
+                                                {selectedRecipe.name}
                                             </ModalHeader>
                                             <ModalBody marginLeft="1em">
                                                 <div
@@ -205,9 +229,29 @@ function MyRecipes() {
                                                     }}
                                                 >
                                                     Ingredients:{"   "}
-                                                    {item.recipe.ingredientLines.join(
-                                                        ",  "
-                                                    )}
+                                                    {selectedRecipe.userCreated
+                                                        ? selectedRecipe.ingredients.map(
+                                                              (ingredient) => (
+                                                                  <div key={ingredient.name}>
+                                                                      <p>
+                                                                          {ingredient.amount}{" "}
+                                                                          {ingredient.units}{" "}
+                                                                          {ingredient.name}
+                                                                      </p>
+                                                                  </div>
+                                                              )
+                                                          )
+                                                        : selectedRecipe.ingredients.map(
+                                                              (ingredientLine,
+                                                                  index
+                                                              ) => (
+                                                                  <div key={index}>
+                                                                      <p>
+                                                                          {ingredientLine.text}
+                                                                      </p>
+                                                                  </div>
+                                                              )
+                                                          )}
                                                 </div>
                                                 <br />
                                                 <div
@@ -218,7 +262,7 @@ function MyRecipes() {
                                                     }}
                                                 >
                                                     Servings:{" "}
-                                                    {item.recipe.yield}
+                                                    {selectedRecipe.servings}
                                                 </div>
                                                 <br />
                                                 <div
@@ -230,8 +274,8 @@ function MyRecipes() {
                                                 >
                                                     Calories/serving:{" "}
                                                     {(
-                                                        item.recipe.calories /
-                                                        item.recipe.yield
+                                                        selectedRecipe.calories /
+                                                        selectedRecipe.servings
                                                     ).toFixed(2)}
                                                 </div>
                                             </ModalBody>
