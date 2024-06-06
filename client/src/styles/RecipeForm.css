@@ -20,7 +20,7 @@
     font-size: 2rem;
     color: var(--dbrown1);
     margin-top: 1rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: .3rem;
 }
 
 .section-header {
@@ -148,4 +148,39 @@
 
 .dietary-label{
     color: var(--dbrown1);
+}
+
+.form-floating {
+    position: relative;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.form-floating input {
+    width: 14rem;
+    height: 2.5rem;
+    border-radius: 4px;
+    background-color: var(--white1);
+    border: none;
+    font-family: 'Radio Canada Big', serif;
+    padding: 8px;
+    margin: 0.3rem 0.3rem 0.3rem 1rem;
+    color: var(--dbrown1);
+}
+
+.form-floating label {
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+    padding: 1rem 0.5rem;
+    pointer-events: none;
+    color: var(--dbrown1);
+}
+
+.form-floating input:focus + label,
+.form-floating input:not(:placeholder-shown) + label {
+    top: -1.8rem;
+    left: 0.5rem;
+    font-size: 1rem;
+    color: var(--dbrown1)
 }

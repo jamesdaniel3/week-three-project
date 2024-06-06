@@ -1,15 +1,33 @@
 import "../styles/Index.css";
 import "../styles/RecipeDisplay.css";
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { ChatBot } from "./ChatBot.jsx";
-import {getAuth} from "firebase/auth";
-import {useParams} from "react-router-dom";
-import axios from "axios";
+import { getAuth } from "firebase/auth";
+import { checkIfFavorited, addFavorite, removeFavorite } from "../utils/RecipeDisplayFunctions";
+import liked from '../assets/liked.png';
+import unliked from '../assets/unliked.png'
 
 export default function RecipeDisplay({ recipe, recipe_id }) {
     const [showChatBot, setShowChatBot] = useState(false);
+    const [isFavorited, setIsFavorited] = useState(false);
+    const [loading, setLoading] = useState(true);
     const auth = getAuth();
     const user_id = auth.currentUser.uid;
+
+    useEffect(() => {
+        const fetchFavoritedStatus = async () => {
+            try {
+                const favorited = await checkIfFavorited(user_id, recipe_id);
+                setIsFavorited(favorited);
+            } catch (error) {
+                console.error('Error fetching favorited status:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFavoritedStatus();
+    }, [user_id, recipe_id]);
 
     const handleButtonClick = () => {
         setShowChatBot(true);
@@ -17,21 +35,35 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
 
     const favoriteButton = async () => {
         try {
-            const response = await axios.put('http://localhost:8888/recipefirebase/add-favorite', {
-                user_id: user_id,
-                recipe_id: recipe_id,
-                recipe: recipe
-            });
-            console.log(response.data.message);
+            await addFavorite(user_id, recipe_id, recipe);
+            setIsFavorited(true);
         } catch (error) {
             console.error('Error adding recipe to favorites:', error);
         }
     };
 
+    const unfavoriteButton = async () => {
+        try {
+            await removeFavorite(user_id, recipe_id);
+            setIsFavorited(false);
+        } catch (error) {
+            console.error('Error removing recipe from favorites:', error);
+        }
+    };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="recipe-page-viewing">
             <div className="text-content">
-                <div className="recipe-title">{recipe.name}</div>
+                <div className="recipe-title">{recipe.name} {isFavorited ? (
+                        <img src={liked}  onClick={unfavoriteButton} alt={"unfavorite button"} className={"favorite-image"}/>
+                    ) : (
+                        <img src={unliked}  onClick={favoriteButton} alt={"favorite button"} className={"favorite-image"}/>
+                    )}
+                </div>
                 <div className="form-container">
                     <div className="section">
                         <p className={"section-header"}>Quick Facts</p>
@@ -51,14 +83,13 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                                     if (ingredient.amount === 1) {
                                         unit = unit.slice(0, unit.length - 1);
                                     }
-                                    if(ingredient.text){
+                                    if (ingredient.text) {
                                         return (
                                             <li key={index}>
                                                 {ingredient.text}
                                             </li>
                                         );
-                                    }
-                                    else{
+                                    } else {
                                         return (
                                             <li key={index}>
                                                 {ingredient.amount} {unit} of {ingredient.name}
@@ -69,7 +100,7 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                             </ul>
                         </div>
                     </div>
-                    {recipe.instructions !== [] &&
+                    {recipe.instructions.length > 0 &&
                         <div className="section">
                             <p className={"section-header"}>Instructions</p>
                             <div className={"section-content"}>
@@ -83,7 +114,17 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                                     })}
                                 </ol>
                                 {recipe.instructionsLink &&
-                                    <p style={{"margin-left": "-20px"}}>Outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
+                                    <p style={{"marginLeft": "-20px", "marginTop": "10px"}}>Additional outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
+                                }
+                            </div>
+                        </div>
+                    }
+                    {recipe.instructions.length === 0 &&
+                        <div className="section">
+                            <p className={"section-header"}>Instructions</p>
+                            <div className={"section-content"}>
+                                {recipe.instructionsLink &&
+                                    <p style={{"marginLeft": "-20px"}}>Outside instructions can be found <a href={recipe.instructionsLink} target={"_blank"}>here</a></p>
                                 }
                             </div>
                         </div>
@@ -96,10 +137,9 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                             </div>
                         </div>
                     }
-                    <button onClick={favoriteButton}>Favorite This Recipe</button>
                 </div>
             </div>
-            <div className="chatBot">
+            <div className={showChatBot ? "chatBot" : "chatBot minimized"}>
                 {showChatBot ? (
                     <ChatBot recipe={recipe} />
                 ) : (

@@ -5,6 +5,7 @@ import { auth } from "../firebase.js";
 import axios from 'axios';
 import "../styles/Login.css";
 import "../styles/Index.css"
+import admin from "./Admin.jsx";
 
 const Login = () => {
     const [email, setUsername] = useState("");
@@ -44,9 +45,6 @@ const Login = () => {
             .then(() => {
                 return axios.get('http://localhost:8888/login');
             })
-            .then((user) => {
-                return axios.post('http://localhost:8888/login/findOrCreateUser', { email: email });
-            })
             .then(response => {
                 const adminEmails = response.data;
                 if (adminEmails.includes(email)) {
@@ -54,6 +52,9 @@ const Login = () => {
                 } else {
                     navigate('/home');
                 }
+            })
+            .then(() => {
+                return axios.post('http://localhost:8888/login/findOrCreateUser', { email: email });
             })
             .catch((e) => {
                 if (e.code === "auth/invalid-email") {

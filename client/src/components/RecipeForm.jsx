@@ -41,21 +41,22 @@ export default function RecipeForm() {
             <div className="recipe-title">Create a Recipe</div>
             <div className="form-container">
                 <form onSubmit={handleFormSubmit}>
-                    <div className="section-header">
-                        Name
+                    <div className="form-floating">
                         <input
                             type="text"
+                            id="name"
                             name="name"
                             value={formData.name}
                             onChange={(e) => handleChange(e, setFormData)}
                             className="input-field"
                             required
                         />
+                        <label htmlFor="name">Name</label>
                     </div>
-                    <div className="section-header">
-                        Servings
+                    <div className="form-floating">
                         <input
                             type="number"
+                            id="servings"
                             name="servings"
                             value={formData.servings}
                             onChange={(e) => handleChange(e, setFormData)}
@@ -63,17 +64,19 @@ export default function RecipeForm() {
                             min={0}
                             step={0.25}
                         />
+                        <label htmlFor="servings">Servings</label>
                     </div>
-                    <div className="section-header">
-                        Calories per serving
+                    <div className="form-floating">
                         <input
                             type="number"
+                            id="calories"
                             name="calories"
                             value={formData.calories}
                             onChange={(e) => handleChange(e, setFormData)}
                             className="input-field"
                             min={0}
                         />
+                        <label htmlFor="calories">Calories per serving</label>
                     </div>
                     <div className="section-header">Ingredients</div>
                     {formData.ingredients.map((ingredient, index) => (
