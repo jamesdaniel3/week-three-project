@@ -5,11 +5,13 @@ import "../styles/Admin.css";
 import chefLogo from '../assets/chef.png'; 
 import plusIcon from '../assets/plus.png'; 
 import { db } from '../firebase'; 
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; // Import Firestore functions
-import axios from 'axios'; 
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import RecipeDetailsModal from '../components/RecipeDetailsModal'; 
 
 function Admin() {
     const [recipes, setRecipes] = useState([]);
+    const [selectedRecipe, setSelectedRecipe] = useState(null); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -27,23 +29,33 @@ function Admin() {
         fetchRecipes();
     }, []);
 
-    // Approve recipe
+    const handleRecipeClick = (recipe) => {
+        setSelectedRecipe(recipe);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedRecipe(null);
+    };
+
     const approveRecipe = async (id) => {
         try {
             const recipeDoc = doc(db, 'recipes', id);
             await updateDoc(recipeDoc, { status: 'OLD' });
             setRecipes(recipes.filter(recipe => recipe.id !== id));
+            handleCloseModal();
         } catch (error) {
             console.error("Error approving recipe: ", error);
         }
     };
 
-    // Reject recipe
     const rejectRecipe = async (id) => {
         try {
             const recipeDoc = doc(db, 'recipes', id);
             await updateDoc(recipeDoc, { status: 'OLD' });
             setRecipes(recipes.filter(recipe => recipe.id !== id));
+            handleCloseModal();
         } catch (error) {
             console.error("Error rejecting recipe: ", error);
         }
@@ -56,10 +68,14 @@ function Admin() {
                 <div className="content">
                     <h1 className="admin-title">Cheffed</h1>
                     <h2 className="admin-subtitle">Admin</h2>
-                    <img src={plusIcon} alt="Add" className="add-button" /> {/* plus */}
+                    <img src={plusIcon} alt="Add" className="add-button" />
                     <div className="user-profiles">
                         {recipes.map(recipe => (
-                            <div className="user-profile" key={recipe.id}>
+                            <div
+                                className="user-profile"
+                                key={recipe.id}
+                                onClick={() => handleRecipeClick(recipe)} 
+                            >
                                 <div className="user-icon">
                                     <img src={chefLogo} alt="User Icon" className="user-icon-img" />
                                 </div>
@@ -67,13 +83,17 @@ function Admin() {
                                     <p>{recipe.name}</p>
                                     <p>{recipe.additionalNotes}</p>
                                 </div>
-                                <div className="actions">
-                                    <div className="approve" onClick={() => approveRecipe(recipe.id)}></div>
-                                    <div className="reject" onClick={() => rejectRecipe(recipe.id)}></div>
-                                </div>
                             </div>
                         ))}
                     </div>
+                    {isModalOpen && (
+                        <RecipeDetailsModal
+                            recipe={selectedRecipe}
+                            onClose={handleCloseModal}
+                            onApprove={approveRecipe}
+                            onReject={rejectRecipe}
+                        />
+                    )}
                 </div>
             </div>
         </>
@@ -81,3 +101,4 @@ function Admin() {
 }
 
 export default Admin;
+
