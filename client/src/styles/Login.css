@@ -31,6 +31,7 @@
     margin-left: 38px;
     font-size: 38px;
     font-family: "Lora", serif;
+    color: var(--dbrown1);
 }
 
 .login-main .banner-image {
