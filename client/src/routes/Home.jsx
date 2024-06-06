@@ -31,6 +31,7 @@ function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [meal, setMealType] = useState("breakfast");
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,11 +49,11 @@ function Home() {
             if (isMorning) {
                 setMealType("breakfast");
             } else if (isAfternoon) {
-                setMealType("brunch");
+                 setMealType("brunch");
             } else if (isEvening) {
                 setMealType("lunch/dinner");
             } else {
-                setMealType("snack");
+                 setMealType("snack");
             }
 
             try {
@@ -63,7 +64,6 @@ function Home() {
                     }
                 );
                 setRandomRecipes(response.data.hits);
-                console.log(response.data.hits);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -71,6 +71,11 @@ function Home() {
 
         fetchData();
     }, []);
+
+    const handleOpenModal = (recipe) => {
+        setSelectedRecipe(recipe);
+        onOpen();
+    };
 
     return (
         <>
@@ -108,7 +113,7 @@ function Home() {
                                             height="8em"
                                             objectFit="cover"
                                             borderTopRadius="15"
-                                            onClick={onOpen}
+                                            onClick={() => handleOpenModal(item.recipe)}
                                         />
                                         <Box padding="0.5em">
                                             <Text textAlign="center">
@@ -122,7 +127,7 @@ function Home() {
                                         </Box>
                                     </CardBody>
                                 </Card>
-                                <Modal
+                                {selectedRecipe && ( <Modal
                                     isOpen={isOpen}
                                     onClose={onClose}
                                     borderRadius="20px"
@@ -147,7 +152,7 @@ function Home() {
                                             marginTop=".3em"
                                             fontSize="1.5em"
                                         >
-                                            {item.recipe.label}
+                                            {selectedRecipe.label}
                                         </ModalHeader>
                                         <ModalBody marginLeft="1em">
                                             <div
@@ -187,9 +192,8 @@ function Home() {
                                             </div>
                                         </ModalBody>
                                         <ModalFooter>
-                                            <Link
-                                                to={`/recipe/${item.recipe.uri}`}
-                                            >
+
+                                            <Link to={`/recipe/${selectedRecipe.uri.split("#recipe_")[1]}/edamam`}>
                                                 <button
                                                     style={{
                                                         backgroundColor:
@@ -213,7 +217,8 @@ function Home() {
                                             </Link>
                                         </ModalFooter>
                                     </ModalContent>
-                                </Modal>
+                                </Modal>)
+                                }
                             </div>
                         ))}
                     </div>
