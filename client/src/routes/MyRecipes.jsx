@@ -40,6 +40,7 @@ function MyRecipes() {
     const [savedOtherAuthorRecipes, setSavedOtherAuthorRecipes] = useState([]);
     const [allSavedRecipes, setAllSavedRecipes] = useState([]);
 
+    const [displayRecipes, setDisplayRecipes] = useState(allSavedRecipes);
     const [selectedValue, setSelectedValue] = useState("");
 
     useEffect(() => {
@@ -59,7 +60,7 @@ function MyRecipes() {
                 );
                 setAllSavedRecipes(responseFavorites.data);
                 setUserRecipes(responseCreated.data);
-                //setAllSavedRecipes(allSavedRecipes.concat(userRecipes));
+                setDisplayRecipes(allSavedRecipes);
             } catch (error) {
                 console.error("Error fetching favorited recipes:", error);
             }
@@ -70,7 +71,6 @@ function MyRecipes() {
         findOtherAuthorRecipes();
     }, [user_id]);
 
-    const [displayRecipes, setDisplayRecipes] = useState(allSavedRecipes); // needs to be here instead of with other use states bc must wait to fetch recipes before setting displayRecipes
 
     const handleOpenModal = (recipe) => {
         setSelectedRecipe(recipe);
@@ -101,6 +101,8 @@ function MyRecipes() {
             ? setDisplayRecipes(savedEdamamRecipes)
             : selectedValue === "otherUserCreated"
             ? setDisplayRecipes(savedOtherAuthorRecipes)
+            : selectedValue == "allSaved"
+            ? setDisplayRecipes(allSavedRecipes)
             : setDisplayRecipes(allSavedRecipes);
     };
 
@@ -128,7 +130,7 @@ function MyRecipes() {
                                 value={selectedValue}
                                 onChange={handleChange}
                             >
-                                <option selected hidden disabled value = "">
+                                <option selected hidden disabled value="">
                                     Filter recipes
                                 </option>
                                 <option value="userCreated">
@@ -232,22 +234,39 @@ function MyRecipes() {
                                                     {selectedRecipe.userCreated
                                                         ? selectedRecipe.ingredients.map(
                                                               (ingredient) => (
-                                                                  <div key={ingredient.name}>
+                                                                  <div
+                                                                      key={
+                                                                          ingredient.name
+                                                                      }
+                                                                  >
                                                                       <p>
-                                                                          {ingredient.amount}{" "}
-                                                                          {ingredient.units}{" "}
-                                                                          {ingredient.name}
+                                                                          {
+                                                                              ingredient.amount
+                                                                          }{" "}
+                                                                          {
+                                                                              ingredient.units
+                                                                          }{" "}
+                                                                          {
+                                                                              ingredient.name
+                                                                          }
                                                                       </p>
                                                                   </div>
                                                               )
                                                           )
                                                         : selectedRecipe.ingredients.map(
-                                                              (ingredientLine,
+                                                              (
+                                                                  ingredientLine,
                                                                   index
                                                               ) => (
-                                                                  <div key={index}>
+                                                                  <div
+                                                                      key={
+                                                                          index
+                                                                      }
+                                                                  >
                                                                       <p>
-                                                                          {ingredientLine.text}
+                                                                          {
+                                                                              ingredientLine.text
+                                                                          }
                                                                       </p>
                                                                   </div>
                                                               )
@@ -281,12 +300,8 @@ function MyRecipes() {
                                             </ModalBody>
                                             <ModalFooter>
                                                 <Link
-                                                    to={`/recipe/${
-                                                        selectedRecipe.uri.split(
-                                                            "#recipe_"
-                                                        )[1]
-                                                    }/edamam`}
-                                                >
+                                                    // to={`/recipe/${docID}/firebase`}
+                                                    >
                                                     <button
                                                         style={{
                                                             backgroundColor:
