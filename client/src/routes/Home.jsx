@@ -32,8 +32,10 @@ function Home() {
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [meal, setMealType] = useState("breakfast");
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        
         const fetchData = async () => {
             const now = new Date();
             const currentHour = now.getHours();
@@ -57,6 +59,7 @@ function Home() {
             }
 
             try {
+                setLoading(true);
                 const response = await axios.get(
                     "http://localhost:8888/edamam/recipesearch",
                     {
@@ -65,12 +68,14 @@ function Home() {
                 );
                 setRandomRecipes(response.data.hits);
                 console.log(response.data.hits);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
-
+        
         fetchData();
+        
     }, []);
 
     const handleOpenModal = (recipe) => {
@@ -87,7 +92,8 @@ function Home() {
                     <h3>Your digital cookbook</h3>
                     <br />
                     <h6>Here are our suggestions for {meal}</h6>
-                    <div
+                    {loading ? (<div class="loader"></div>) : (
+                        <div
                         style={{
                             display: "flex",
                             flexDirection: "row",
@@ -237,6 +243,8 @@ function Home() {
                             </div>
                         ))}
                     </div>
+                    )}
+                    
                 </div>
             </div>
         </>
