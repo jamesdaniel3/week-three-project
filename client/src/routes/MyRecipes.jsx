@@ -20,7 +20,7 @@ function MyRecipes() {
     const [createdRecipes, setCreatedRecipes] = useState([]);
     const [favoriteRecipesFromOtherUsers, setFavoriteRecipesFromOtherUsers] = useState([]);
     const [favoriteRecipesFromEdamam, setFavoriteRecipesFromEdamam] = useState([]);
-    const [selectedValue, setSelectedValue] = useState("");
+    const [selectedValue, setSelectedValue] = useState("allSaved");
     const [currentlyDisplayedRecipes, setCurrentlyDisplayedRecipes] = useState([]);
 
     useEffect(() => {
@@ -42,6 +42,7 @@ function MyRecipes() {
                 setFavoriteRecipes(responseFavorites.data);
                 setFavoriteRecipesFromOtherUsers(getFavoritesFromOtherUsers(responseCreated.data, responseFavorites.data));
                 setFavoriteRecipesFromEdamam(getFavoritesFromEdamam(responseFavorites.data));
+                setCurrentlyDisplayedRecipes(responseFavorites.data); // Set initial displayed recipes
             } catch (error) {
                 console.error("Error fetching favorited recipes:", error);
             }

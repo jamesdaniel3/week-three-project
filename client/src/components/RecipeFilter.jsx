@@ -18,9 +18,6 @@ const RecipeFilter = ({ selectedValue, handleChange }) => {
                 value={selectedValue}
                 onChange={handleChange}
             >
-                <option hidden disabled value="">
-                    Filter recipes
-                </option>
                 <option value="userCreated">
                     Your created recipes
                 </option>
