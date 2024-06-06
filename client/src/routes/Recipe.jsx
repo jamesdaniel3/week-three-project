@@ -85,7 +85,7 @@ function Recipe() {
             <div className={"container"}>
                 <NavBar />
                 <div className="content">
-                    {recipe ? <RecipeDisplay recipe={recipe} /> : <div>No recipe found</div>}
+                    {recipe ? <RecipeDisplay recipe={recipe} recipe_id={id} /> : <div>No recipe found</div>}
                 </div>
             </div>
         </>

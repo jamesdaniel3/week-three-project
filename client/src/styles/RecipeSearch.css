@@ -6,35 +6,46 @@
   align-items: center;
   padding: 20px;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden;
+  height: 90%;
+  padding: 0;
 }
 
-.search-bar {
+.header {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-bar, .radio-group {
+  width: 60%;
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
 #input-form {
-    display: flex;
-    padding: 1rem;
-    background-color: var(--lbrown1);
-    width: 60%;
-    justify-content: center;
-    border-radius: 12px;
-  }
-  
-  .text-input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-right: 1rem;
-    height: 3em;
-  }
+  margin-top: 5px;
+  display: flex;
+  padding: 1rem;
+  background-color: var(--lbrown1);
+  width: 100%;
+  justify-content: center;
+  border-radius: 12px;
+}
 
-button {
+.text-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-right: 1rem;
+  height: 3em;
+}
+
+.submit-button2 {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 10px;
@@ -43,7 +54,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.submit-button2:hover {
   background-color: #45a049;
 }
 
@@ -53,8 +64,88 @@ button:hover {
   gap: 1rem;
   justify-content: center;
   width: 100%;
-  height: calc(100vh - 150px); /* Adjust based on the height of the search bar and padding */
+  height: calc(100vh - 150px);
   overflow-y: auto;
   padding-top: 20px;
 }
 
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #FFF;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.radio-toolbar {
+  margin-bottom: 10px;
+  display: flex;
+  padding: 1rem;
+  background-color: var(--lbrown1);
+  width: 95%;
+  justify-content: center;
+  border-radius: 12px;
+  gap: 20px;
+}
+
+.radio-toolbar input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+.radio-toolbar label {
+    display: flex;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border: 1px solid var(--dbrown1);
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: var(--white1);
+    color: var(--dbrown1);
+    justify-content: center;
+    align-items: center;
+}
+
+.radio-toolbar label:hover {
+  background-color: var(--lbrown2);
+}
+
+
+.radio-toolbar input[type="radio"]:checked + label {
+  background-color: var(--dbrown1);
+  color: white;
+}
+
+.select {
+  display: inline-block;
+  padding: 10px 20px;
+  font-family: sans-serif, Arial;
+  font-size: 16px;
+  border: 1px solid var(--dbrown1);
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: var(--white1);
+  color: var(--dbrown1);
+}
+
+.option-container {
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  flex-direction: column;
+  gap: 5px;
+}
