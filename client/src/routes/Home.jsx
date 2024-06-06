@@ -26,52 +26,51 @@ import {
     Box,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import img from "../assets/zdz9mr_blackBear.png";
 
 function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [meal, setMealType] = useState("breakfast");
 
-useEffect(() => {
-    const fetchData = async () => {
-        const now = new Date();
-        const currentHour = now.getHours();
+    useEffect(() => {
+        const fetchData = async () => {
+            const now = new Date();
+            const currentHour = now.getHours();
 
-        const isWithinTimeRange = (startHour, endHour) => {
-            return currentHour >= startHour && currentHour < endHour;
+            const isWithinTimeRange = (startHour, endHour) => {
+                return currentHour >= startHour && currentHour < endHour;
+            };
+
+            const isMorning = isWithinTimeRange(5, 10);
+            const isAfternoon = isWithinTimeRange(10, 13);
+            const isEvening = isWithinTimeRange(13, 21);
+
+            if (isMorning) {
+                setMealType("breakfast");
+            } else if (isAfternoon) {
+                setMealType("brunch");
+            } else if (isEvening) {
+                setMealType("lunch/dinner");
+            } else {
+                setMealType("snack");
+            }
+
+            try {
+                const response = await axios.get(
+                    "http://localhost:8888/edamam/recipesearch",
+                    {
+                        params: { mealType: meal },
+                    }
+                );
+                setRandomRecipes(response.data.hits);
+                console.log(response.data.hits);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         };
 
-        const isMorning = isWithinTimeRange(5, 10);
-        const isAfternoon = isWithinTimeRange(10, 13);
-        const isEvening = isWithinTimeRange(13, 21);
-
-        if (isMorning) {
-            setMealType("breakfast");
-        } else if (isAfternoon) {
-             setMealType("brunch");
-        } else if (isEvening) {
-            setMealType("lunch/dinner");
-        } else {
-             setMealType("snack");
-        }
-
-        try {
-            const response = await axios.get(
-                "http://localhost:8888/edamam/recipesearch",
-                {
-                    params: { mealType: meal },
-                }
-            );
-            setRandomRecipes(response.data.hits);
-            console.log(response.data.hits);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    fetchData();
-}, []);
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -132,33 +131,35 @@ useEffect(() => {
                                         style={{
                                             backgroundColor:
                                                 "rgba(0, 0, 0, 0.02)",
-                                            // backdropFilter: "blur(1px)",
                                         }}
                                     />
                                     <ModalContent
                                         marginTop="20%"
                                         marginLeft="36%"
                                         width="400px"
-                                        height="200px"
+                                        height="250px"
                                         bg="#EADDCF"
                                         borderRadius="20px"
                                     >
                                         <ModalHeader
                                             textAlign="center"
                                             color="55423D"
-                                            fontSize="2em"
+                                            marginTop=".3em"
+                                            fontSize="1.5em"
                                         >
-                                            Recipe name
+                                            {item.recipe.label}
                                         </ModalHeader>
                                         <ModalBody marginLeft="1em">
                                             <div
                                                 style={{
                                                     position: "absolute",
-                                                    top: "2.5rem",
-                                                    left: ".5rem", 
+                                                    top: "5rem",
+                                                    left: ".5rem",
                                                 }}
                                             >
-                                                Ingredients:{" "}
+                                                Ingredients:
+                                                {item.recipe.ingredientLines}
+                                                <ul></ul>
                                             </div>
                                             <br />
                                             <div
@@ -168,7 +169,7 @@ useEffect(() => {
                                                     left: ".5rem",
                                                 }}
                                             >
-                                                Servings:
+                                                Servings: {item.recipe.yield}
                                             </div>
                                             <br />
                                             <div
@@ -178,12 +179,17 @@ useEffect(() => {
                                                     left: ".5rem",
                                                 }}
                                             >
-                                                Calories/serving:
+                                                Calories/serving:{" "}
+                                                {(
+                                                    item.recipe.calories /
+                                                    item.recipe.yield
+                                                ).toFixed(2)}
                                             </div>
                                         </ModalBody>
                                         <ModalFooter>
-                                            
-                                            <Link to={`/recipe/${item.recipe.uri}`}>
+                                            <Link
+                                                to={`/recipe/${item.recipe.uri}`}
+                                            >
                                                 <button
                                                     style={{
                                                         backgroundColor:
@@ -191,11 +197,15 @@ useEffect(() => {
                                                         color: "#EADDCF",
                                                         borderRadius: "1em",
                                                         height: "2em",
-                                                        width: "7em",
+                                                        width: "9em", // Increase the width
                                                         border: "none",
                                                         position: "absolute",
                                                         bottom: ".6rem",
                                                         right: ".5rem",
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "center",
+                                                        alignItems: "center",
                                                     }}
                                                 >
                                                     See full recipe
