@@ -66,7 +66,7 @@ const RecipeSearch = () => {
       } else if (source === "userCreated") {
         const response = await axios.get("http://localhost:8888/recipefirebase/recipes");
         const filteredData = response.data.filter((recipe) =>
-          recipe.name.toLowerCase().includes(query.toLowerCase())
+          recipe.userCreated && recipe.name.toLowerCase().includes(query.toLowerCase() )
         );
         setSearchResults(filteredData);
         setCurrentSource(source);
