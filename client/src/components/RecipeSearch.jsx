@@ -96,10 +96,32 @@ const RecipeSearch = () => {
           <button type="submit" className="submit-button2">
             Search
           </button>
+          <div class="line"></div>
+          <div className="radio-toolbar">
+          <input           
+          type="radio"
+          name="source"
+          id="edamam"
+          value="edamam"
+          checked={source === "edamam"}
+          onChange={handleSourceChange}
+        />
+        <label htmlFor="edamam">Edamam</label>
+
+        <input
+          id="userCreated"
+          type="radio"
+          name="source"
+          value="userCreated"
+          checked={source === "userCreated"}
+          onChange={handleSourceChange}
+        />
+        <label htmlFor="userCreated">User Created</label>
+          </div>
         </form>
       </div>
       
-      <div className="radio-toolbar">
+      <div className="options-container">
         <div className="option-container">
           <p>Diet</p>
           <select 
@@ -171,25 +193,7 @@ const RecipeSearch = () => {
         </div>
         
 
-        <input           
-          type="radio"
-          name="source"
-          id="edamam"
-          value="edamam"
-          checked={source === "edamam"}
-          onChange={handleSourceChange}
-        />
-        <label htmlFor="edamam">Edamam</label>
 
-        <input
-          id="userCreated"
-          type="radio"
-          name="source"
-          value="userCreated"
-          checked={source === "userCreated"}
-          onChange={handleSourceChange}
-        />
-        <label htmlFor="userCreated">User Created</label>
       </div>
       {loading ? (
         <span className="loader"></span>
