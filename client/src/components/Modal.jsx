@@ -25,10 +25,8 @@ import {
     Center,
     Box,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 
-export default function Modal(item) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export default function RecipeModal({item, isOpen, onClose}) {
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} borderRadius="20px">

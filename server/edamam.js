@@ -14,7 +14,8 @@ const router = express.Router();
  */
 router.get('/recipesearch', async (req, res) => {
     try {
-        const filterParams = req.query || { diet: "balanced" };
+        
+        const filterParams = req.query.q !== '' ? req.query : { diet: "balanced" };
         const query = querystring.stringify(filterParams);
         const url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${appid}&app_key=${appkey}&${query}`;
         const response = await axios.get(url);

@@ -1,168 +1,216 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-    Button,
-    Card,
-    CardBody,
-    Text,
-    Image,
-} from "@chakra-ui/react";
-import '../styles/RecipeSearch.css';
+import React, { useState } from "react";
+import axios from "axios";
+import { useDisclosure } from "@chakra-ui/react";
+import RecipeCard from "./Card.jsx";
+import RecipeModal from "./Modal.jsx";
+import "../styles/RecipeSearch.css";
 import img from "../assets/zdz9mr_blackBear.png";
-import { Link } from "react-router-dom";
+
+const dietOptions = ["", "balanced", "high-fiber", "high-protein", "low-carb", "low-fat", "low-sodium"];
+const healthOptions = [
+  "", "alcohol-cocktail", "alcohol-free", "celery-free", "crustacean-free", "dairy-free", "DASH", 
+  "egg-free", "fish-free", "fodmap-free", "gluten-free", "immuno-supportive", "keto-friendly", 
+  "kidney-friendly", "kosher", "low-fat-abs", "low-potassium", "low-sugar", "lupine-free", 
+  "Mediterranean", "mollusk-free", "mustard-free", "no-oil-added", "paleo", "peanut-free", 
+  "pescatarian", "pork-free", "red-meat-free", "sesame-free", "shellfish-free", "soy-free", 
+  "sugar-conscious", "sulfite-free", "tree-nut-free", "vegan", "vegetarian", "wheat-free"
+];
+const cuisineOptions = [
+  "", "American", "Asian", "British", "Caribbean", "Central Europe", "Chinese", "Eastern Europe", 
+  "French", "Indian", "Italian", "Japanese", "Kosher", "Mediterranean", "Mexican", "Middle Eastern", 
+  "Nordic", "South American", "South East Asian"
+];
+const mealOptions = ["", "Breakfast", "Dinner", "Lunch", "Snack", "Teatime"];
+const dishOptions = [
+  "", "Biscuits and cookies", "Bread", "Cereals", "Condiments and sauces", "Desserts", "Drinks", 
+  "Main course", "Pancake", "Preps", "Preserve", "Salad", "Sandwiches", "Side dish", "Soup", "Starter", 
+  "Sweets"
+];
 
 const RecipeSearch = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [source, setSource] = useState("edamam");
+  const [currentSource, setCurrentSource] = useState("edamam");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-//   useEffect( () => {
-//     const fetchData = async () => {
-//       const response = await axios.get('http://localhost:8888/edamam/recipesearch', { params: {diet: "balanced"}});
-//     setSearchResults(response.data.hits);  
-//     console.log(response.data);
-//     }
-//     fetchData();
-//   },[]);
+  const [diet, setDiet] = useState("");
+  const [health, setHealth] = useState("");
+  const [cusineType, setCusineType] = useState("");
+  const [mealType, setMealType] = useState("");
+  const [dishType, setDishType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const query = e.target.elements.query.value;
-    if (!query) return;
 
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8888/edamam/recipesearch', {
-        params: { q: query }
-      });
-      setSearchResults(response.data.hits);
+      if (source === "edamam") {
+        const params = {
+          q: query,
+          ...(diet && { diet }),
+          ...(health && { health }),
+          ...(cusineType && { cusineType }),
+          ...(mealType && { mealType }),
+          ...(dishType && { dishType }),
+        };
+        const response = await axios.get(
+          "http://localhost:8888/edamam/recipesearch",
+          {
+            params
+          }
+        );
+        setSearchResults(response.data.hits);
+        setCurrentSource(source);
+      } else if (source === "userCreated") {
+        const response = await axios.get("http://localhost:8888/recipefirebase/recipes");
+        const filteredData = response.data.filter((recipe) =>
+          recipe.name.toLowerCase().includes(query.toLowerCase())
+        );
+        setSearchResults(filteredData);
+        setCurrentSource(source);
+      }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSourceChange = (e) => {
+    setSource(e.target.value);
+    console.log(e.target.value)
   };
 
   return (
     <div className="page-container">
       <div className="search-bar">
         <form id="input-form" onSubmit={handleSubmit}>
-          <input type="text" name="query" className="text-input" placeholder="Search for a recipe..." />
-          <button type="submit">Search</button>
+          <input
+            type="text"
+            name="query"
+            className="text-input"
+            placeholder="Search for a recipe..."
+          />
+          <button type="submit" className="submit-button2">
+            Search
+          </button>
         </form>
       </div>
-      {loading && <p>Loading...</p>}
-      <div className="results-container">
-        {searchResults.map((item) => (
-          <div key={item.recipe.label}>
-            <Card
-              bg="#EADDCF"
-              width="12em"
-              height="10em"
-              borderRadius="15"
-              marginTop="30px"
-              marginRight="5px"
-              onClick={onOpen}
-            >
-              <CardBody>
-                <Image
-                  src={item.recipe.images.SMALL.url}
-                  width="100%"
-                  height="55%"
-                  borderTopRadius="15"
-                />
-                <Text marginLeft="15px">{item.recipe.label}</Text>
-              </CardBody>
-            </Card>
-          </div>
-        ))}
+      
+      <div className="radio-toolbar">
+        <div className="option-container">
+          <p>Diet</p>
+          <select 
+          value={diet}
+          name="diet"
+          onChange={(e) => setDiet(e.target.value)}
+          className="select"
+        >
+          {dietOptions.map((option) => (
+            <option key={option} value={option}>{option || '--'}</option>
+          ))}
+        </select>
+        </div>
+        
+        <div className="option-container">
+          <p>Health</p>
+          <select         
+          value={health}
+          name="health"
+          onChange={(e) => setHealth(e.target.value)}
+          className="select"
+        >
+          {healthOptions.map((option) => (
+            <option key={option} value={option}>{option || '--'}</option>
+          ))}
+        </select>
+        </div>
+        
+        <div className="option-container">
+          <p>Cusine Type</p>
+           <select 
+          value={cusineType}
+          name="cusineType"
+          onChange={(e) => setCusineType(e.target.value)}
+          className="select"
+        >
+          {cuisineOptions.map((option) => (
+            <option key={option} value={option}>{option || '--'}</option>
+          ))}
+        </select>
+        </div>
+       
+        <div className="option-container">
+          <p>Meal Type</p>
+          <select 
+          value={mealType}
+          name="mealType"
+          onChange={(e) => setMealType(e.target.value)}
+          className="select"
+        >
+          {mealOptions.map((option) => (
+            <option key={option} value={option}>{option || '--'}</option>
+          ))}
+        </select>
+        </div>
+        
+        <div className="option-container">
+          <p>Dish Type</p>
+          <select 
+          value={dishType}
+          name="dishType"
+          onChange={(e) => setDishType(e.target.value)}
+          className="select"
+        >
+          {dishOptions.map((option) => (
+            <option key={option} value={option}>{option || '--'}</option>
+          ))}
+        </select>
+        </div>
+        
+
+        <input           
+          type="radio"
+          name="source"
+          id="edamam"
+          value="edamam"
+          checked={source === "edamam"}
+          onChange={handleSourceChange}
+        />
+        <label htmlFor="edamam">Edamam</label>
+
+        <input
+          id="userCreated"
+          type="radio"
+          name="source"
+          value="userCreated"
+          checked={source === "userCreated"}
+          onChange={handleSourceChange}
+        />
+        <label htmlFor="userCreated">User Created</label>
       </div>
-      <Modal
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        borderRadius="20px"
-                    >
-                        <ModalOverlay
-                            style={{
-                                backgroundColor: "rgba(0, 0, 0, 0.2)",
-                                backdropFilter: "blur(2px)",
-                            }}
-                        />
-                        <ModalContent
-                            marginTop="20%"
-                            marginLeft="36%"
-                            width="400px"
-                            height="200px"
-                            bg="#EADDCF"
-                            borderRadius="20px"
-                        >
-                            <ModalHeader
-                                textAlign="center"
-                                color="55423D"
-                                fontSize="2em"
-                            >
-                                Recipe name
-                            </ModalHeader>
-                            <ModalBody marginLeft="1em">
-                                <div
-                                    style={{
-                                        position: "absolute", 
-                                        top: "2.5rem", 
-                                        left: ".5rem", 
-                                    }}
-                                >
-                                    Ingredients:{" "}
-                                </div>
-                                <br />
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        bottom: "2.5rem",
-                                        left: ".5rem",
-                                    }}
-                                >
-                                    Servings:
-                                </div>
-                                <br />
-                                <div
-                                    style={{
-                                        position: "absolute", // Add this line
-                                        bottom: ".9rem", // Add this line
-                                        left: ".5rem", // Add this line
-                                    }}
-                                >
-                                    Calories/serving:
-                                </div>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Link to="/find-recipes"> 
-                                    <button
-                                        style={{
-                                            backgroundColor: "#55423D",
-                                            color: "#EADDCF",
-                                            borderRadius: "1em",
-                                            height: "2em",
-                                            width: "7em",
-                                            border: "none",
-                                            position: "absolute",
-                                            bottom: ".6rem",
-                                            right: ".5rem",
-                                        }}
-                                    >
-                                        See full recipe
-                                    </button>
-                                </Link>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
+      {loading ? (
+        <span className="loader"></span>
+      ) : (
+        <>
+          <div className="results-container">
+            {searchResults.map((item, index) => (
+              <div key={index}>
+                <RecipeCard
+                  item={item}
+                  isOpen={isOpen}
+                  onOpen={onOpen}
+                  onClose={onClose}
+                  source={currentSource}
+                />
+              </div>
+            ))}
+          </div>
+          <RecipeModal isOpen={isOpen} onClose={onClose} />
+        </>
+      )}
     </div>
   );
 };
