@@ -2,12 +2,30 @@ import "../styles/Index.css";
 import "../styles/RecipeDisplay.css";
 import React, {useState} from "react";
 import { ChatBot } from "./ChatBot.jsx";
+import {getAuth} from "firebase/auth";
+import {useParams} from "react-router-dom";
+import axios from "axios";
 
-export default function RecipeDisplay({ recipe }) {
+export default function RecipeDisplay({ recipe, recipe_id }) {
     const [showChatBot, setShowChatBot] = useState(false);
+    const auth = getAuth();
+    const user_id = auth.currentUser.uid;
 
     const handleButtonClick = () => {
         setShowChatBot(true);
+    };
+
+    const favoriteButton = async () => {
+        try {
+            const response = await axios.put('http://localhost:8888/recipefirebase/add-favorite', {
+                user_id: user_id,
+                recipe_id: recipe_id,
+                recipe: recipe
+            });
+            console.log(response.data.message);
+        } catch (error) {
+            console.error('Error adding recipe to favorites:', error);
+        }
     };
 
     return (
@@ -78,6 +96,7 @@ export default function RecipeDisplay({ recipe }) {
                             </div>
                         </div>
                     }
+                    <button onClick={favoriteButton}>Favorite This Recipe</button>
                 </div>
             </div>
             <div className="chatBot">
