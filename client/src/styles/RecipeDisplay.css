@@ -24,8 +24,20 @@
     flex: 0 0 40%; /* 40% width */
     padding: 20px;
     box-sizing: border-box;
-    border: 2px solid var(--dbrown1);; /* Border color */
+    border: 2px solid var(--dbrown1); /* Border color */
     border-radius: 15px; /* Curved edges */
+    transition: all 0.3s ease-in-out;
+}
+
+.chatBot.minimized {
+    flex: 0 0 10%; /* 10% width when minimized */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    height: 100px; /* Adjust height as needed */
+    min-width: 30%;
+    margin-left: 5%;
 }
 
 /* Additional styling for the chatbot content */
@@ -58,6 +70,7 @@ form {
     border-radius: 5px;
     background-color: var(--dbrown1);
     color: white;
+    min-width: 80px;
 }
 
 .message-container {
@@ -66,7 +79,7 @@ form {
     padding-right: 10px;
 }
 
-.favorite-image{
+.favorite-image {
     height: 20px;
     width: 20px;
 }

@@ -139,7 +139,7 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
                     }
                 </div>
             </div>
-            <div className="chatBot">
+            <div className={showChatBot ? "chatBot" : "chatBot minimized"}>
                 {showChatBot ? (
                     <ChatBot recipe={recipe} />
                 ) : (
