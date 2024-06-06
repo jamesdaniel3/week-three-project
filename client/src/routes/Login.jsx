@@ -34,7 +34,8 @@ const Login = () => {
         setUsername(value);
     };
 
-    const login = () => {
+    const login = (e) => {
+        e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setUser(userCredential.user);
@@ -79,13 +80,18 @@ const Login = () => {
                     <div className='login-main-header'>
                         <h1> Login </h1>
                     </div>
-                    <div className='login-boxes'>
+                    <form onSubmit={login}className='login-boxes'>
                         <input value={email} placeholder='email' onChange={handleChangeUser} />
                         <input value={password} type='password' placeholder='password' onChange={handleChangePass} />
+                        <div className='login-option'>
+                        <div style={{display: "flex", alignItems: "center", gap: "20px", justifyContent: "center", flexDirection: "column"}}>
+                          <button type="submit" className='login-button'> LOGIN </button>
+                          <p>Don't have an accuont? Sign Up <a href="/signup">Here</a></p>
+                        </div>    
+                        
                     </div>
-                    <div className='login-option'>
-                        <button className='login-button' onClick={login}> LOGIN </button>
-                    </div>
+                    </form>
+                    
                     <span className='error-message'> {errorMessage} </span>
                 </div>
             </div>
