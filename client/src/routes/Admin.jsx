@@ -3,7 +3,6 @@ import NavBar from "../components/Navbar.jsx";
 import "../styles/Index.css";
 import "../styles/Admin.css"; 
 import chefLogo from '../assets/chef.png'; 
-import plusIcon from '../assets/plus.png'; 
 import documentsIcon from '../assets/documents.png'; 
 import { db } from '../firebase'; 
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
@@ -69,7 +68,6 @@ function Admin() {
                 <div className="content">
                     <h1 className="admin-title">Cheffed</h1>
                     <h2 className="admin-subtitle">Admin</h2>
-                    <img src={plusIcon} alt="Add" className="add-button" />
                     <div className="user-profiles">
                         {recipes.map(recipe => (
                             <div className="user-profile" key={recipe.id}>
