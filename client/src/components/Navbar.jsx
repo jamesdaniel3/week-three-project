@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { signOut } from "firebase/auth";
+import {getAuth, signOut} from "firebase/auth";
 import '../styles/Navbar.css';
 import '../styles/Index.css'
 import { auth } from "../firebase.js";
@@ -10,6 +10,12 @@ import edge from '../assets/edge.png'
 export default function NavBar() {
     const [hidden, setHidden] = useState('');
     const navigate = useNavigate();
+
+    const admin_emails = ["jamesmd333@gmail.com", "shamsul.r.haque@gmail.com", "annadbatman@gmail.com", "simrith.ranjan@gmail.com", "test@test.com"]
+
+    const auth = getAuth();
+    const user_email = auth.currentUser.email;
+
 
     const logout = () => {
         signOut(auth)
@@ -57,6 +63,13 @@ export default function NavBar() {
                         Create a Recipe
                     </span>
                 </Link>
+                {admin_emails.includes(user_email) &&
+                    <Link className="navbar-link" to={"/admin"}>
+                    <span>
+                        Admin
+                    </span>
+                    </Link>
+                }
                 <div className="navbar-link logout" onClick={logout}>
                     <span>Logout</span>
                 </div>
