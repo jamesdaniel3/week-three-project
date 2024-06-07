@@ -4,6 +4,7 @@ import "../styles/Index.css";
 import "../styles/Admin.css"; 
 import chefLogo from '../assets/chef.png'; 
 import plusIcon from '../assets/plus.png'; 
+import documentsIcon from '../assets/documents.png'; 
 import { db } from '../firebase'; 
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import RecipeDetailsModal from '../components/RecipeDetailsModal'; 
@@ -71,17 +72,20 @@ function Admin() {
                     <img src={plusIcon} alt="Add" className="add-button" />
                     <div className="user-profiles">
                         {recipes.map(recipe => (
-                            <div
-                                className="user-profile"
-                                key={recipe.id}
-                                onClick={() => handleRecipeClick(recipe)} 
-                            >
+                            <div className="user-profile" key={recipe.id}>
                                 <div className="user-icon">
                                     <img src={chefLogo} alt="User Icon" className="user-icon-img" />
                                 </div>
                                 <div className="recipe-details">
                                     <p>{recipe.name}</p>
                                     <p>{recipe.additionalNotes}</p>
+                                </div>
+                                <div className="actions">
+                                    <div className="view-details-container">
+                                        <button className="view-details-button" onClick={() => handleRecipeClick(recipe)}>
+                                            <img src={documentsIcon} alt="View Details" className="view-details-icon" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -101,4 +105,6 @@ function Admin() {
 }
 
 export default Admin;
+
+
 
