@@ -174,10 +174,12 @@ function Home() {
                                                         paddingRight: ".1rem",
                                                     }}
                                                 >
-                                                    Ingredients:{"   "}
-                                                    {selectedRecipe.ingredientLines.join(
-                                                        ",  "
-                                                    )}
+                                                    <Text>Ingredients:</Text>
+                                                    <ul style={{marginLeft: "1.5rem"}}>
+                                                        {selectedRecipe.ingredientLines.map((ingredient, index) => (
+                                                            <li key={index}>{ingredient}</li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
                                                 <br />
                                                 <div
