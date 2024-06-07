@@ -98,9 +98,9 @@ button.hide-button img.hidden {
 }
 
 .navbar-link .logo {
-    width: 30px; 
-    height: 30px; 
-    margin-right: 10px; 
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    margin-right: 10px; /* Space between image and text */
 }
 
 .navbar-link span {
