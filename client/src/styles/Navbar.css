@@ -97,6 +97,12 @@ button.hide-button img.hidden {
     box-sizing: border-box; 
 }
 
+.navbar-link .logo {
+    width: 30px; 
+    height: 30px; 
+    margin-right: 10px; 
+}
+
 .navbar-link span {
     margin-left: 15px;
     display: none; 
