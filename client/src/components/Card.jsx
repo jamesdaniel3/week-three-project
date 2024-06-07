@@ -25,7 +25,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import img from "../assets/zdz9mr_blackBear.png";
+import img from "../assets/genericFood.png";
 export default function RecipeCard({ item, isOpen, onOpen, onClose, source }) {
   return (
     <>

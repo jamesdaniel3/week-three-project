@@ -33,6 +33,7 @@ const RecipeSearch = () => {
   const [source, setSource] = useState("edamam");
   const [currentSource, setCurrentSource] = useState("edamam");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const [diet, setDiet] = useState("");
   const [health, setHealth] = useState("");
@@ -83,6 +84,11 @@ const RecipeSearch = () => {
     setSource(e.target.value);
   };
 
+  const handleOpenModal = (recipe) => {
+    setSelectedRecipe(recipe);
+    console.log(recipe)
+    onOpen();
+  };
   return (
     <div className="page-container">
       <div className="search-bar">
@@ -205,14 +211,16 @@ const RecipeSearch = () => {
                 <RecipeCard
                   item={item}
                   isOpen={isOpen}
-                  onOpen={onOpen}
+                  onOpen={() => handleOpenModal(source === "edamam" ? (item.recipe):(item))}
                   onClose={onClose}
                   source={currentSource}
                 />
+                <RecipeModal selectedRecipe={selectedRecipe} isOpen={isOpen} onClose={onClose} />
               </div>
+              
             ))}
           </div>
-          <RecipeModal isOpen={isOpen} onClose={onClose} />
+          
         </>
       )}
     </div>

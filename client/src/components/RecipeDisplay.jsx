@@ -52,7 +52,7 @@ export default function RecipeDisplay({ recipe, recipe_id }) {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div class="loader"></div>;
     }
 
     return (

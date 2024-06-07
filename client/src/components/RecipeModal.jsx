@@ -45,21 +45,25 @@ const RecipeModal = ({ isOpen, onClose, selectedRecipe }) => {
                     >
                         Ingredients:{"   "}
                         {selectedRecipe.userCreated
-                            ? selectedRecipe.ingredients.map((ingredient) => (
-                                <div key={ingredient.name}>
-                                    <p>
+                            ? 
+                            <ul style={{marginLeft: "1.5rem"}}>
+                            {selectedRecipe.ingredients.map((ingredient) => (
+                                <li key={ingredient.name}>
+                                   
                                         {ingredient.amount} {ingredient.units}{" "}
                                         {ingredient.name}
-                                    </p>
-                                </div>
-                            ))
-                            : selectedRecipe.ingredients.map(
-                                (ingredientLine, index) => (
-                                    <div key={index}>
-                                        <p>{ingredientLine.text}</p>
-                                    </div>
-                                )
-                            )}
+                                   
+                                </li>
+                            ))}
+                            </ul>
+                            :                             
+                            <ul style={{marginLeft: "1.5rem"}}>
+                            {selectedRecipe.ingredients.map((ingredient) => (
+                                <li key={ingredient.text}>
+                                        {ingredient.text}          
+                                </li>
+                            ))}
+                        </ul>}
                     </div>
                     <br />
                     <div
