@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { signOut } from "firebase/auth";
+import React, { useState } from "react";
+import {getAuth, signOut} from "firebase/auth";
 import '../styles/Navbar.css';
 import '../styles/Index.css';
 import { auth } from "../firebase.js";
@@ -17,12 +17,11 @@ export default function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setIsLoggedIn(!!user);
-        });
-        return () => unsubscribe();
-    }, []);
+    const admin_emails = ["jamesmd333@gmail.com", "shamsul.r.haque@gmail.com", "annadbatman@gmail.com", "simrith.ranjan@gmail.com", "test@test.com"]
+
+    const auth = getAuth();
+    const user_email = auth.currentUser.email;
+
 
     const logout = () => {
         signOut(auth)
@@ -59,12 +58,16 @@ export default function NavBar() {
                     <img src={cookingLogo} alt="Create a Recipe" className="logo" />
                     <span>Create a Recipe</span>
                 </Link>
-                {isLoggedIn && (
-                    <div className="navbar-link logout" onClick={logout}>
-                        <img src={checkOutLogo} alt="Logout" className="logo" />
-                        <span>Logout</span>
-                    </div>
-                )}
+                {admin_emails.includes(user_email) &&
+                    <Link className="navbar-link" to={"/admin"}>
+                    <span>
+                        Admin
+                    </span>
+                    </Link>
+                }
+                <div className="navbar-link logout" onClick={logout}>
+                    <span>Logout</span>
+                </div>
             </div>
         </>
     );

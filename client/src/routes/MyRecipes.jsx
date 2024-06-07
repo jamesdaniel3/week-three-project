@@ -42,7 +42,7 @@ function MyRecipes() {
                 setFavoriteRecipes(responseFavorites.data);
                 setFavoriteRecipesFromOtherUsers(getFavoritesFromOtherUsers(responseCreated.data, responseFavorites.data));
                 setFavoriteRecipesFromEdamam(getFavoritesFromEdamam(responseFavorites.data));
-                setCurrentlyDisplayedRecipes(responseFavorites.data); // Set initial displayed recipes
+                setCurrentlyDisplayedRecipes(responseFavorites.data); 
             } catch (error) {
                 console.error("Error fetching favorited recipes:", error);
             }
