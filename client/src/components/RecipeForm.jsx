@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "../styles/RecipeForm.css";
 import "../styles/Index.css";
 import {
@@ -11,6 +11,9 @@ import {
     addInstruction,
     removeInstruction,
 } from "../utils/RecipeFormFunctions";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialFormData = {
     name: "",
@@ -29,12 +32,21 @@ const initialFormData = {
 
 export default function RecipeForm() {
     const [formData, setFormData] = useState(initialFormData);
+    const [recipeSubmitted, setRecipeSubmitted] = useState(false);
 
     const handleFormSubmit = (e) => {
         handleSubmit(e, formData);
         // Create a deep copy of initialFormData to reset the form
         setFormData(JSON.parse(JSON.stringify(initialFormData)));
+        setRecipeSubmitted(true);
     };
+
+    useEffect(() => {
+        if (recipeSubmitted) {
+            toast.success("Recipe Submitted!");
+            setRecipeSubmitted(false);
+        }
+    }, [recipeSubmitted]);
 
     return (
         <div className="recipe-page">
@@ -218,6 +230,7 @@ export default function RecipeForm() {
                     </button>
                 </form>
             </div>
+            <ToastContainer style={{ zIndex: 9999 }} />
         </div>
     );
 }
